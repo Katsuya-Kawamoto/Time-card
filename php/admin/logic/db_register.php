@@ -8,8 +8,6 @@ if(!isset($sei,$mei)){
     echo "出力出来ませんでした。";
     exit();
 }
-    //ログインされているか確認
-    require_once "../connect.php";
 
     if(!isset($number) || !strlen($number)){
         $output["err-number"]="社員ナンバーを入力してください";
@@ -29,6 +27,19 @@ if(!isset($sei,$mei)){
         if($result){
             //フォームの名前と上記で取得した名前が一致するか
             $output["err-number"]="同じ社員IDが既に存在します";
+        }else{
+            //sqlに接続して、同じ社員番号があるかチェック
+            $sql="SELECT * FROM `working_hours` WHERE `number`=:number";
+            $stmt=connect()->prepare($sql);
+            $stmt->bindParam(':number',$number);
+            $stmt->execute();
+            $result=$stmt->fetch();//結果があるか取得
+            $stmt=null;
+
+            if($result){
+                //フォームの名前と上記で取得した名前が一致するか
+                $output["err-number"]="勤怠管理に以前の社員のデータが残っています。";
+            }
         }
     }
 
@@ -66,7 +77,7 @@ if(!isset($sei,$mei)){
         //sqlに接続して、同じアドレスがあるかチェック
         $sql="SELECT * FROM `admin` WHERE `id`=:id";
         $stmt=connect()->prepare($sql);
-        $stmt->bindParam(':id',$_SESSION["e-id"]);
+        $stmt->bindParam(':id',$_SESSION["admin_id"]);
         $stmt->execute();
         $result=$stmt->fetch();
         
@@ -87,6 +98,7 @@ if(!isset($sei,$mei)){
         $output["admin"]=$_SESSION["admin"];
         $output["header-sei"]=$_SESSION["header-sei"];
         $output["e-id"]=$_SESSION['e-id'];
+        $output["admin_id"]=$_SESSION['admin_id'];
         $output[]=$_SESSION;
         $_SESSION=$output;
         $pdo=null;

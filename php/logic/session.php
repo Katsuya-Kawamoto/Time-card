@@ -30,6 +30,9 @@ class session{
         if(isset($session["admin"])){
             $_SESSION["admin"] = $session["admin"];
         }
+        if(isset($session["admin_id"])){
+            $_SESSION["admin_id"] = $session["admin_id"];
+        }
     }
 
     /** 
@@ -62,7 +65,7 @@ class session{
      * @return $SESSION セッション情報
      */
     function login(){
-        require_once "../connect.php";//サーバー情報取得
+        require_once "connect.php";//サーバー情報取得
         $err=[];    
         //フォーム内容チェック
         if(!isset($_POST["id"]) || !strlen($_POST["id"])){
@@ -119,14 +122,17 @@ class session{
             //管理者からログインしている場合は"admin"付与。
             $motourl = $_SERVER['HTTP_REFERER'];//前ページデータの取得
             $path=parse_url($motourl);//pathの取得
-            if($path["path"]=='/timecard/administrator.php') $_SESSION['admin']="admin";
-        }
+            if($path["path"]=='/timecard/administrator.php'){
+                $_SESSION['admin']="admin";
+                $_SESSION['admin_id']=$_POST["id"];
+            }
         return $_SESSION;
+        }
     }
 
     function staff_login(){
         //ログインされているか確認
-        require_once "../connect.php";
+        require_once "connect.php";
 
         //エラーメッセージ
         $err=[];

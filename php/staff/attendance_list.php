@@ -1,16 +1,17 @@
 <?php
-//ログイン
-require "./logic/login.php";
-//勤務状況取得
-require_once "./logic/time_input.php";       //今日の日付
-require_once "./logic/time_info_input.php";  //今月の勤務状況一覧
-require_once "./logic/time_calculation.php"; //今月の勤務状況
-require_once "./logic/time_cont.php";        //今月の出勤回数
-//セッション確認
-var_dump($_SESSION);
-//データベース切断
-$stmt=null;
-$pdo=null;
+    //ログイン
+    require "./logic/login.php";
+    //勤務状況取得
+    require_once "../logic/time_input.php";
+    $time=Time_input();                                             //現在の日付取得
+    $time_info=time_info_input($_SESSION["e-id"],$time["month"]);   //今月の勤怠状況取得
+    $time_cl=time_calculation($time_info);                          //総勤務時間算出
+    $time_count=time_count($time_info);                             //出勤回数算出
+    //セッション確認
+    var_dump($_SESSION);
+    //データベース切断
+    $stmt=null;
+    $pdo=null;
 ?>
 <html lang="ja">
 <head>
@@ -45,23 +46,23 @@ $pdo=null;
                 <h1>勤怠登録フォーム</h1>
                     <form action="attendance_delete_verification.php" method="POST">
                     <div>
-                        <h2><?php echo $month ?>月勤怠状況</h2>
-                        <p><?php echo $day ?>日現在</p>
+                        <h2><?php echo $time["month"]; ?>月勤怠状況</h2>
+                        <p><?php echo $time["day"]; ?>日現在</p>
                     </div>
-<?php if($result): ?>     
+<?php if($time_info): ?>     
                     <ul>
                         <li>
                             <dl class="pc_flex">
                                 <dt><b>総勤務時間</b></dt>
-                                <dd><?php echo $work_time; ?>時間<?php printf("%02d", $work_minutes); ?>分</dd>
+                                <dd><?php echo $time_cl["work_time"]; ?>時間<?php printf("%02d", $time_cl["work_minutes"]); ?>分</dd>
                             </dl>
                             <dl class="pc_flex">
                                 <dt><b>総時間外労働時間</b></dt>
-                                <dd><?php echo $over_time; ?>時間<?php printf("%02d", $over_minutes); ?>分</dd>
+                                <dd><?php echo $time_cl["over_time"]; ?>時間<?php printf("%02d", $time_cl["over_minutes"]); ?>分</dd>
                             </dl>
                             <dl class="pc_flex">
                                 <dt><b>総深夜勤務時間</b></dt>
-                                <dd><?php echo $midnight_time; ?>時間<?php printf("%02d", $midnight_minutes); ?>分</dd>
+                                <dd><?php echo $time_cl["midnight_time"]; ?>時間<?php printf("%02d", $time_cl["midnight_minutes"]); ?>分</dd>
                             </dl>
                         </li>
                     </ul>
@@ -77,7 +78,7 @@ $pdo=null;
                                 
                                 
                             </tr>
-<?php foreach($result as $key=>$value):?>
+<?php foreach($time_info as $key=>$value):?>
                             <tr>
                                 <td><?php echo $value["day"]; ?>日</td>
                                 <td><?php if($value["work_type"]==1)echo "*";?></td>

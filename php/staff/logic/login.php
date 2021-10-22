@@ -1,5 +1,5 @@
 <?php
-require "../admin/logic/session.php";
+require "../logic/session.php";
 $login=new session();
 $login->start();
 //ログイン情報の確認
@@ -18,6 +18,6 @@ if(!isset($_SESSION["e-id"])){
     //セッション情報リセット
     $output = $_SESSION; //セッション情報をoutputに格納
     $login->reset();//ログイン情報を残して削除
-    require_once("./logic/connect.php");//サーバー情報取得
+    require_once("../logic/connect.php");//サーバー情報取得
 }
-?>
+

@@ -4,7 +4,7 @@
 */
 
 //ログインされているか確認
-require "./connect.php";
+require "../connect.php";
 
 $sql="  SELECT * FROM `working_hours` 
         LEFT OUTER JOIN `working_time` ON working_hours.keey = working_time.keey 

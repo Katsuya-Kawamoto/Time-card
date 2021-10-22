@@ -14,5 +14,3 @@ $stmt->bindParam(':number',$number);
 $stmt->bindParam(':month',$month);
 $stmt->execute();
 $result=$stmt->fetchAll();
-
-?>

@@ -3,19 +3,18 @@
 require_once "./logic/login.php";
 //フォーム内容確認
 require_once "./logic/form_check.php";
-//投稿日時取得
-require_once "../staff/logic/time_input.php";
-
+//現在の日付取得
+require_once "../logic/time_input.php";
+$time=Time_input();                                             
 //アップロード準備
 require_once "./logic/db_access.php";
 $db=new db();
-
 if(!isset($_POST["id"])){//$_POST["id"]があるか
     //投稿
-    $db->notification_insert($title,$contents,$name,$created_at);
+    $db->notification_insert($title,$contents,$name,$time["created_at"]);
 }else{
     //更新
-    $db->notification_update($_POST["id"],$title,$contents,$name,$created_at);
+    $db->notification_update($_POST["id"],$title,$contents,$name,$time["created_at"]);
 }
 
 //トークン削除
@@ -101,7 +100,7 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>投稿時間</dt>
-                                <dd><?php echo $created_at;?></dd>
+                                <dd><?php echo $time["created_at"];?></dd>
                             </dl>
                         </li>
                     </ul>

@@ -2,50 +2,9 @@
 /*
     MySQL指定格納
 */
-
 class db{
 
-    /**
-     * お知らせ件名取得
-     * @param  無し
-     * @return $result ->   お知らせの件名とid
-     */
-    function info_title($offset=0,$count=5){
-    //内容表示
-    $sql="SELECT * FROM `notification` ORDER BY `id` DESC LIMIT ".$offset.", ".$count;
-    $stmt= connect()->prepare($sql);
-    $stmt->execute();
-    $result=$stmt->fetchAll();
-    return $result;
-    }
 
-    /**
-     * 選択したお知らせの詳細を表示
-     *
-     * @param  $id      ->お知らせid
-     * @return $return3 ->お知らせ内容詳細
-     */
-    function info_input($id){
-        $sql="SELECT * FROM `notification` WHERE `id`=:id";
-        $stmt= connect()->prepare($sql);
-        $stmt->bindParam(':id',$id);
-        $stmt->execute();
-        $result3=$stmt->fetch();
-        return $result3;
-    }
-
-    /**
-     * お知らせ件数取得
-     *
-     * @return $info_count ->お知らせ件数
-     */
-    function info_count(){
-        $sql="SELECT COUNT(`id`) FROM `notification`";
-        $stmt= connect()->prepare($sql);
-        $stmt->execute();
-        $info_count=$stmt->fetch();//件数
-        return $info_count;
-    }
     /**
      * 従業員情報登録
      *
@@ -198,6 +157,38 @@ class db{
         $stmt=connect()->prepare($sql);
         $stmt->bindParam(':id',$id);
         $stmt->execute();
+    }
+
+        /**
+     * 勤怠情報の削除
+     * @param  無し
+     * @return 無し 
+     */
+    function ad_delete($value){
+        $table=["`working_hours`","`working_info`","`working_time`"];
+        $otb="`over_time_reason`";
+
+        /**削除実行（サーバーに接続し、選択された勤務情報を削除）
+         * @param $Table -> テーブル名
+         * @param $value -> key名(日付_社員No)
+         * @return 無し 
+         */
+        function delete($Table,$value){
+            $sql="DELETE FROM ".$Table."WHERE `keey` LIKE :keey ";
+            $stmt=connect()->prepare($sql);
+            $stmt->bindParam(':keey',$value);
+            $stmt->execute();
+        }
+        //削除の実行
+            foreach($table as $tb): 
+                delete($tb,$value);//正規化されたテーブルごとに削除
+            endforeach;
+            //残業内容のテーブルのみ有無が分かれるのでtryで処理
+            try{
+                delete($otb,$value);   
+            }catch(Exception $ignored){
+                // 残業内容が無いので処理を無視
+            }
     }
 }
 ?>

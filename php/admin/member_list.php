@@ -5,12 +5,15 @@ require_once "./logic/login.php";
 require_once "./logic/db_access.php";
 $db=new db();
 $result=$db->member_list();
-
 foreach ($result as $row) {
     // データベースのフィールド名で出力
     $info[]=$row;
 }
+//トークン生成
+require_once '../logic/common_func.php';
+//セッション確認
 var_dump($_SESSION);
+//データベース切断
 $stmt=null;
 $pdo=null;
 ?>
@@ -103,6 +106,10 @@ $pdo=null;
                     </tbody>
                 </table>
                 <p style="text-align: right; margin-top:10px;">チェックした項目をまとめて削除<input type="submit" value="削除"></p>
+<?php if(isset($output["err-form"])) :?>
+                                <p class="error"><?php echo $output["err-form"]; ?></ｐ>
+<?php endif; ?>
+                <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
                 </form>
 <?php endif; ?>
             </article>

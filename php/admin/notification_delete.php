@@ -1,13 +1,8 @@
 <?php 
 //ログイン
 require_once "./logic/login.php";
-$check=$_POST['id'];
-//お知らせ削除
-require_once "./logic/db_access.php";
-$db=new db();
-foreach($check as $value):
-    $db->notification_delete($value);
-endforeach;
+//削除確認
+require_once "./logic/nc_delete_check.php";
 //データベース切断
 $stmt=null;
 $pdo=null;

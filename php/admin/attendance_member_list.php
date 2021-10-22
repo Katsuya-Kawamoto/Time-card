@@ -12,8 +12,8 @@ foreach ($result as $row) {
     $info[]=$row;
 }
 
-//現在の日時取得
-require "../staff/logic/time_input.php";
+require_once "../logic/time_input.php";
+$time=Time_input();                                       //現在の日付取得
 
 $stmt=null;
 $pdo=null;
@@ -108,13 +108,13 @@ $pdo=null;
                 <hr>
                 <p>年月を選択してください。</p>
                     <select name="year" id="year">
-<?php for($i=$year-1;$i<=$year+1;$i++):?>
-                        <option value="<?php echo (int)$i;?>" <?php if((int)$year===(int)$i) echo "selected";?>><?php echo (int)$i;?>年</option>
+<?php for($i=$time["year"]-1;$i<=$time["year"]+1;$i++):?>
+                        <option value="<?php echo (int)$i;?>" <?php if((int)$time["year"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>年</option>
 <?php endfor; ?>
                     </select>
                     <select name="month" id="month">
 <?php for($i=1;$i<=12;$i++):?>
-                    <option value="<?php echo (int)$i;?>" <?php if((int)$month===(int)$i) echo "selected";?>><?php echo (int)$i;?>月</option>
+                    <option value="<?php echo (int)$i;?>" <?php if((int)$time["month"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>月</option>
 <?php endfor; ?>
                     </select>
                 <p style="margin-top:10px;">チェックした項目をまとめて出力<input type="submit" value="出力"></p>

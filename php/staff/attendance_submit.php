@@ -5,12 +5,11 @@ require_once "./logic/login.php";
 require_once "./logic/ad_form_check.php";
 //データベースに登録
 if(isset($_POST["id"])){
-    require "./logic/update.php";
+    require "./logic/ad_update.php";
     unset($_SESSION["key"]);
 }else{
-    require "./logic/submit.php";
+    require "./logic/ad_submit.php";
 }
-
 $worktype_arr=array("通常勤務","休日出勤");
 //トークン削除
 unset($_SESSION['csrf_token']);

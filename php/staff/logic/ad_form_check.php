@@ -5,8 +5,8 @@
     //エラーメッセージなどセッションに格納するもの
     $_SESSION['csrf_token']=$output['csrf_token'];  //トークン
     $output=[];                                     //エラー表示リセット
-    //今日の日付取得
-    require_once "time_input.php";
+    require_once "../../logic/time_input.php";
+    $time=Time_input();                             //現在の日付取得
 
     //フォーム入力内容確認
     //①直接アクセスでは無く、POSTの値があること。

@@ -2,14 +2,13 @@
 //ログイン
 require_once "./logic/login.php";
 //トークン生成
-require_once './logic/functions.php';
+require_once '../logic/common_func.php';
 //編集・投稿判定
 $select_path="/timecard/php/admin/notification_list.php";//リストページ
 $flag=edit_flag($select_path);
 if($flag){//編集の条件に合ったらデータ取得
-    require_once "./logic/db_access.php";
-    $db=new db();
-    $result=$db->info_input($_GET["id"]);
+    require_once "../logic/common_func.php";
+    $result=info_input($_GET["id"]);
     $title="編集";
 }else{
     $title="投稿";

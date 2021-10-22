@@ -1,10 +1,13 @@
 <?php
-
     $token = filter_input(INPUT_POST, 'csrf_token');
     //トークンがない、もしくは一致しない場合、処理を中止
     if (!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
         $output["err-form"]="トークンエラー：再度入力を行ってください。";
     }
+    //配列に入っていた時間を引数に代入
+    $year   = $time["year"];
+    $month  = $time["month"];
+    $day    = $time["day"];
 
     $over_time_flag=false;
     if(!isset($Year) || !strlen($Year)){
@@ -207,6 +210,7 @@
         $output["header-sei"]=$_SESSION["header-sei"];
         $output["e-id"]=$_SESSION['e-id'];
         $_SESSION=$output;
+        $address='attendance_form.php'; 
         if(isset($_GET["id"])){                     //GET値ある場合は付与
             $address.="?id=".$_POST["id"];
         }

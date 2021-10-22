@@ -2,7 +2,7 @@
 //ログイン
 require "./logic/login.php";
 //トークン生成
-require_once '../admin/logic/functions.php';
+require_once '../logic/common_func.php';
 //セッション確認
 var_dump($_SESSION);
 //データベース切断
@@ -37,6 +37,9 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
+                    <li>
+                        <a href="../logic/logout.php">ログアウト</a>
+                    </li>
                 </ul>
             </aside>
             <article>
@@ -81,9 +84,7 @@ $pdo=null;
             </article>
         </main>
         <footer>
-            <nav>
-                <p><a href="./logic/logout.php">ログアウト</a></p>
-            </nav>
+            <p>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</p>
         </footer>
     </div>
 </body>

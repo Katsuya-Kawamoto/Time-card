@@ -2,22 +2,23 @@
 //ログイン
 require_once "./logic/login.php";
 //トークン生成
-require_once '../admin/logic/functions.php';
-
-var_dump($_SESSION);
+require_once '../logic/common_func.php';
 //編集・投稿判定
-$select_path="/timecard/php/staff/attendance_list.php";//リストページ
+$select_path="/timecard/php/staff/attendance_list.php"; //判定すpath
 $flag=edit_flag($select_path);
-if($flag){//編集の条件に合ったらデータ取得
+if($flag){                                              //編集の条件に合ったらデータ取得
     require_once './logic/ad_function.php';
     $_SESSION["id"]=$_GET["id"];
     $result=staff_time_key($_GET["id"]);
     $title="編集";
 }else{
     //今日の日付取得
-    require_once "./logic/time_input.php";
+    require_once "../logic/time_input.php";
+    $time=Time_input();                                 //現在の日付取得
     $title="投稿";
 }
+//セッション確認
+var_dump($_SESSION);
 //データベース切断
 $stmt=null;
 $pdo=null;
@@ -50,6 +51,9 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
+                    <li>
+                        <a href="../logic/logout.php">ログアウト</a>
+                    </li>
                 </ul>
             </aside>
             <article>
@@ -73,9 +77,9 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>勤務日</dt>
-                                <dd>年:<input type="text" name="year" id="year" size="10" value="<?php echo ($flag)?$result["year"]:$year;?>" required>年</dd>
-                                <dd>月:<input type="text" name="month" id="month" size="10" value="<?php echo ($flag)?$result["month"]:$month;?>" required>月</dd>
-                                <dd>日:<input type="text" name="day" id="day" size="10" value="<?php echo ($flag)?$result["day"]:$day;?>" required>日</dd>
+                                <dd>年:<input type="text" name="year" id="year" size="10" value="<?php echo ($flag)?$result["year"]:$time["year"];?>" required>年</dd>
+                                <dd>月:<input type="text" name="month" id="month" size="10" value="<?php echo ($flag)?$result["month"]:$time["month"];?>" required>月</dd>
+                                <dd>日:<input type="text" name="day" id="day" size="10" value="<?php echo ($flag)?$result["day"]:$time["day"];?>" required>日</dd>
 <?php if(isset($output["err-year"])) :?>
                                 <dd class="error"><?php echo $output["err-year"]; ?></dd>
 <?php endif; ?>
@@ -266,9 +270,7 @@ $pdo=null;
             </article>
         </main>
         <footer>
-            <nav>
-                <p><a href="./logic/logout.php">ログアウト</a></p>
-            </nav>
+            <p>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</p>
         </footer>
     </div>
     <script type="text/javascript" src="calculation.js"></script>

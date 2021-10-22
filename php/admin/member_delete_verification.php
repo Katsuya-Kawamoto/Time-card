@@ -1,19 +1,9 @@
 <?php
 //ログイン
 require_once "./logic/login.php";
-
-$check=$_POST['checkbox'];
-var_dump($check);
-
-foreach($check as $value_a){
-    $sql="SELECT * FROM `staff` WHERE number=$value_a";
-    $stmt= connect()->query($sql);
-
-    foreach ($stmt as $row) {
-        // データベースのフィールド名で出力
-        $info[]=$row;
-    }
-}
+//削除確認と実行
+require_once "./logic/mb_delete_check.php";
+//データベース切断
 $stmt=null;
 $pdo=null;
 ?>
@@ -60,6 +50,7 @@ $pdo=null;
                 <h1>削除確認</h1>
                 <form action="member_delete.php" method="POST">
                     <h2>以下の内容を削除します。</h2>
+                    <p style="color:red">一度、削除すると削除される方の勤怠情報も削除されます。</p>
                     <table style="width:100%;">
                         <tbody>
                             <tr>
@@ -77,8 +68,10 @@ $pdo=null;
                             <tr>
                                 <th colspan="7">
 <?php foreach($check as $value_a):?>
-                                    <input type="hidden" name="id[]" value="<?php echo $value_a;?>">
+                                    <input type="hidden" name="checkbox[]" value="<?php echo $value_a;?>">
 <?php endforeach; ?>
+                                    <input type="hidden" name="csrf_token" value="<?php echo $_POST['csrf_token'];?>">
+                                    <input type="hidden" name="key" value="key"> 
                                     <input type="submit" value="削除">
                                     <input type="button" value="戻る" onclick="history.go(-1)">
                             </th>

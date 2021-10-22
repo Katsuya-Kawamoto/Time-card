@@ -1,15 +1,11 @@
 <?php 
 //ログイン
 require_once "./logic/login.php";
-
-//POSTの情報を取得
-$check=$_POST['id'];
-//削除実行
-require_once "./logic/db_access.php";
-$db=new db();
-foreach($check as $value){
-    $db->member_delete($value);
-}
+//削除確認と実行
+require_once "./logic/mb_delete_check.php";
+//セッション削除
+unset($_SESSION['csrf_token']);
+//データベース切断
 $stmt=null;
 $pdo=null;
 ?>

@@ -3,7 +3,7 @@
 require_once "./logic/login.php";
 //フォームチェック
 require_once "./logic/ad_form_check.php";
-
+//HTML表示の為、勤務体系 数値→文字に変換
 $worktype_arr=array("通常勤務","休日出勤");
 //セッション確認
 var_dump($_SESSION);
@@ -39,6 +39,9 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
+                    <li>
+                        <a href="../logic/logout.php">ログアウト</a>
+                    </li>
                 </ul>
             </aside>
             <article>
@@ -134,9 +137,7 @@ $pdo=null;
             </article>
         </main>
         <footer>
-            <nav>
-                <p><a href="./logic/logout.php">ログアウト</a></p>
-            </nav>
+            <p>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</p>
         </footer>
     </div>
 </body>

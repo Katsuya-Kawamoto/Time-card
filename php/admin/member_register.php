@@ -6,7 +6,7 @@ require_once "./logic/db_access.php";
 $member=new db();
 
 //トークン生成
-require_once './logic/functions.php';
+require_once '../logic/common_func.php';
 //編集・投稿判定
 $select_path="/timecard/php/admin/member_list.php";//リストページ
 $flag=edit_flag($select_path);

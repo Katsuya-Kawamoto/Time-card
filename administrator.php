@@ -1,6 +1,6 @@
 <?php
 //セッションスタート
-require_once "./php/admin/logic/session.php";
+require_once "./php/logic/session.php";
 $session=new session();
 $session->start();//セッションスタート
 $output=$_SESSION;//変数に一旦、セッション情報を代入
@@ -8,7 +8,7 @@ $session->destroy();//セッション情報の削除
 
 //トークン生成
 $session->start();//セッションスタート
-require_once './php/admin/logic/functions.php';
+require_once './php/logic/common_func.php';
 var_dump($_SESSION);
 ?>
 <!DOCTYPE html>

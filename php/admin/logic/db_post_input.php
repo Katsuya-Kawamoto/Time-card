@@ -37,6 +37,7 @@
         $output["admin"]=$_SESSION["admin"];
         $output["header-sei"]=$_SESSION["header-sei"];
         $output["e-id"]=$_SESSION['e-id'];
+        $output["admin_id"]=$_SESSION['admin_id'];
         $output[]=$_SESSION;
         $_SESSION=$output;
         $pdo=null;

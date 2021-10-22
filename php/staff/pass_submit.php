@@ -46,6 +46,9 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
+                    <li>
+                        <a href="../logic/logout.php">ログアウト</a>
+                    </li>
                 </ul>
             </aside>
             <article>
@@ -56,9 +59,7 @@ $pdo=null;
             </article>
         </main>
         <footer>
-            <nav>
-                <p><a href="./logic/logout.php">ログアウト</a></p>
-            </nav>
+            <p>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</p>
         </footer>
     </div>
 </body>

@@ -1,7 +1,8 @@
 <?php
     //ログイン
     require_once "./logic/login.php";
-
+    //トークン生成
+    require_once '../logic/common_func.php';
     //リスト表示
     $count=20;
     if(isset($_GET["page"])){
@@ -11,16 +12,15 @@
     }
 
     //お知らせ情報取得
-    require_once "./logic/db_access.php";
-    $db=new db();
-    $result=$db->info_title($offset,$count);
+    require_once "../logic/common_func.php";
+    $result=info_title($offset,$count);
     foreach ($result as $row) {
         // データベースのフィールド名で出力
         $info[]=$row;
     }
 
     //件数取得
-    $info_count=$db->info_count();
+    $info_count=info_count();
     $page=ceil((int)$info_count["COUNT(`id`)"]/$count);//ページ数取得
 
     $stmt=null;
@@ -99,6 +99,9 @@
 <?php endforeach; ?>
                         </tbody>
                     </table>
+<?php if(isset($output["err-form"])) :?>
+                                <p class="error"><?php echo $output["err-form"]; ?></ｐ>
+<?php endif; ?>
                     <p style="text-align: right; margin-top:10px;">チェックした項目をまとめて削除<input type="submit" value="削除"></p>
                     <ul id="page" style="display:flex;">
                         <li>Page:</li>
@@ -106,6 +109,7 @@
                         <li style="padding-left:10px;"><a href="notification_list.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
 <?php endfor;?>
                     </ul>
+                    <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
                 </form>
 <?php endif; ?>
             </article>

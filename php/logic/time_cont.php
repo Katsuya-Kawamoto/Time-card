@@ -17,4 +17,3 @@ foreach($result as $key=>$value){
         $midnight_time_count+=1;
     }
 }
-?>

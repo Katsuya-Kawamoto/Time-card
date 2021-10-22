@@ -4,7 +4,7 @@
 */
 
 //セッションスタート
-require_once "session.php";
+require_once "../logic/session.php";
 $session=new session();
 $session->start();
 
@@ -29,7 +29,7 @@ if(!isset($_SESSION["admin"])){ //1-1.
     //セッション情報リセット
     $output = $_SESSION; //セッション情報をoutputに格納
     $session->reset();//ログイン情報を残して削除
-    require_once("connect.php");//サーバー情報取得
+    require_once("../logic/connect.php");//サーバー情報取得
     
 }
 ?>

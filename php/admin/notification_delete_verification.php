@@ -1,18 +1,11 @@
 <?php
     //ログイン
     require_once "./logic/login.php";
-    $check=$_POST['checkbox'];
-    
-    foreach($check as $value_a){
-        $sql="SELECT * FROM `notification` WHERE id=$value_a";
-        $stmt= connect()->query($sql);
-        foreach ($stmt as $row) {
-            // データベースのフィールド名で出力
-            $info[]=$row;
-        }
-    }
+    //削除確認
+    require_once "./logic/nc_delete_check.php";
+    //セッション確認
     var_dump($_SESSION);
-
+    //セッション削除
     $stmt=null;
     $pdo=null;
 ?>
@@ -86,6 +79,8 @@
                             </tr>
                         </tbody>
                     </table>
+                    <input type="hidden" name="csrf_token" value="<?php echo $token; ?>">
+                    <input type="hidden" name="key" value="key"> 
                 </form>
             </article>
         </main>
