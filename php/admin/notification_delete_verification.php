@@ -27,7 +27,7 @@
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -43,42 +43,47 @@
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li><a href="../logic/logout.php">ログアウト</a></li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
                 <h1>削除確認</h1>
+                <p><b>以下の内容を削除します。</b></p>
                 <form action="notification_delete.php" method="POST">
-                    <h2>以下の内容を削除します。</h2>
-                    <table style="width:100%;">
-                        <tbody>
-                            <tr>
-                                <th>id</th>
-                                <th>件名</th>
-                                <th>内容</th>
-                                <th>投稿者</th>
-                                <th>投稿日時</th>
-                            </tr>
+                    <div id="list_output">
+                        <table style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <th>id</th>
+                                    <th>件名</th>
+                                    <th>内容</th>
+                                    <th>投稿者</th>
+                                    <th>投稿日時</th>
+                                </tr>
 <?php foreach($info as $key => $value) :?>
-                            <tr>
-                                <td><?php echo $value["id"];?></td>
-                                <td><?php echo $value["title"];?></td>
-                                <td><?php echo $value["contents"];?></td>
-                                <td><?php echo $value["name"];?></td>
-                                <td><?php echo $value["created_at"];?></td>
-                            </tr>
+                                <tr>
+                                    <td><?php echo $value["id"];?></td>
+                                    <td><?php echo $value["title"];?></td>
+                                    <td><?php echo $value["contents"];?></td>
+                                    <td><?php echo $value["name"];?></td>
+                                    <td><?php echo $value["created_at"];?></td>
+                                </tr>
 <?php endforeach; ?>
-                            <tr>
-                                <th colspan="7">
+                            </tbody>
+                        </table>
+                        <p>
+                            <input type="submit" value="削除">
+                            <input type="button" value="戻る" onclick="history.go(-1)">
+                        </p>
+                    </div>
 <?php foreach($check as $value_a):?>
-                                    <input type="hidden" name="id[]" value="<?php echo $value_a;?>">
+                    <input type="hidden" name="checkbox[]" value="<?php echo $value_a;?>">
 <?php endforeach; ?>
-                                    <input type="submit" value="削除">
-                                    <input type="button" value="戻る" onclick="history.go(-1)">
-                            </th>
-                            </tr>
-                        </tbody>
-                    </table>
                     <input type="hidden" name="csrf_token" value="<?php echo $token; ?>">
                     <input type="hidden" name="key" value="key"> 
                 </form>

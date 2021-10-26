@@ -10,117 +10,202 @@ body{
     min-height:100vh;
     display: flex;
     flex-direction: column;
-}
-header,
-main{
-    margin-bottom: 10px;
-}
-a{
-    color:#333333;
-    display: block;
-}
-table{
-    border-collapse: collapse;
-}
-td{
-    text-align: center;
-}
-/*header*/
-header{
-    background-color: steelblue;
-    color:white;
-}
-header>h1{
-    padding-left: 5px;
-}
-header>h1>a{
-    color:white;
-}
-/*main*/
-main{
-    flex:1;
-    display: flex;
-    flex-direction: column;
-}
-/*form*/
-main>article>form{
-    padding: 5px;
-}
-main>article ul#form>li>dl>dt{
-    background-color: rgb(202, 227, 248);
-    color:#333333;
-    padding-left: 5px;
-    font-weight: bold;
-}
-main>article ul#form>li>dl>dd{
-    margin:10px 0;
-}
-main>article ul#form>li:nth-last-of-type(1)>dl>dd{
-    margin-bottom: unset;
+    background-color: #0b3361;
+    border:1px solid #0b3361;
 }
 
-/*aside*/
+header{
+    color:white;
+    text-align: center;
+    padding: 10px 0;  
+}
+header a{
+    color: rgb(255, 230, 0);
+}
+main{
+    flex:1;
+    margin-bottom: 10px;
+}
+main a{
+    display: block;
+    padding: 10px;
+    color:#0b3361;
+}
 main a:hover{
     background-color: rgb(180, 244, 255);
 }
-main>aside>ul{
+main aside{
     margin-bottom: 10px;
 }
-main>aside>ul>ul>li{
+main aside>#menu{
+    color:#ffffff;
+    border:1px solid #0b3361;
+    padding: 5px;
+}
+main aside>#menu>li{
+    text-align: center;
+    border:1px solid #ffffff;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+main aside>#menu>ul>li{
     margin-left: 10px;
-    border-bottom: 1px solid #eeeeee;
+    background-color: #ffffff;
+    border-bottom:1px solid #dddddd ;
+    margin-bottom: 5px;
 }
-main>aside>ul>li{
-    font-weight: bold;
-    /* text-align: center; */
-    border-bottom: 1px solid black;
+main aside>#menu>ul>li:nth-last-of-type(1){
+    border-bottom:unset;
+}   
+main article{
+    padding: 10px;
+    background-color: white;
 }
-main>aside>ul>li>a{
-    padding: 5px;
-    display: block;
-    border: 1px solid black;
-}    
+article #notification{
+    margin-bottom: 10px;
 
-/*notification*/
-main #notification{
+}
+article #notification>#n-title{
+    border: 1px solid #0b3361;
+}
+#notification>#n-title>li{
+    border: 1px solid #dddddd;
+}
+#notification>#n-title>li:nth-last-of-type(1){
+    border: unset;
+}
+#notification a{
+    color:#0b3361;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+#notification span{
+    font-size: 10px;
+}
+/*お知らせ表示*/
+#notification>#info{
+    border: 1px solid #333333;
+    padding: 10px;
+    
+}
+#notification>#info>li{
+    padding: 5px;
+}
+#notification>#info>li:nth-of-type(1){
+    margin-bottom: 10px;
+    border: 1px solid #333333;
+    background-color: rgb(255, 237, 234);
+    
+}
+#notification>#info>li:nth-of-type(2){
+    margin-bottom: 10px;
+    background-color: white;
+}
+#notification>#info>li:nth-of-type(3){
+    border-top: 1px solid #aaaaaa;
+}
+#notification>#info>li:nth-of-type(4){
+    border-bottom: 1px solid #aaaaaa;
+}
+/* フォーム */
+article #form dt{
+    background-color: rgb(216, 228, 245);
+    padding: 5px;
+    border: 1px solid #333333;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+article #form dd{
+    margin-bottom: 5px;    
+}
+article #form input{
+    margin-right: 5px;
+}
+#time li{
     margin-bottom: 10px;
 }
-main #notification ul{
-    border: 1px solid black;
+#time dl{
+    display: flex;
+    background-color: rgb(239, 241, 119);
+    border: 1px solid #333333;
 }
-main #notification ul#info{
-    padding: 5px;
+#time dt{
+    width: 40%;
+    min-width: 150px;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
 }
-main #notification ul>li{
-    border-bottom: 1px solid #eeeeee;
+#time dd{
+    width: 60%;
+    padding: 10px;
+    background-color: white;
 }
-main #notification ul>li>a{
-    padding-left: 5px;
-}
-
-/*time*/
-main #time table{
+/*出勤状況*/
+#time-info{
     width: 100%;
 }
-main #time th{
-    background-color: pink;
+#time-info>tbody{
+    font-size: calc(1.3rem + 0.7*(100vw - 320px)/320);
 }
-main #time td{
-    padding-left:5px;
+#time-info td,
+#time-info th{
+    padding: 3px;
+    border: 1px solid #aaaaaa;
 }
-tbody,
-td,
-th{
-    border-collapse: collapse;
-    border:1px solid #333;
-}
-
-/*footer*/
-footer{
+#time-info th{
+    background-color: #0b3361;
+    color: white;
+} 
+#time-info td{
     text-align: center;
-    font-size: 0.5rem;
+}
+#time-info td>ul{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#time-info  .border-none{
+    border: none;
+}
+/*リスト*/
+#list_output th{
+    background-color: #0b3361;
+    color:white;
+    border: 1px solid #aaaaaa;
+}
+#list_output td{
+    text-align: center;
+    border: 1px solid #aaaaaa;
+}
+#list_output p{
+    margin-top: 10px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+#list_output p>input{
+    margin: 5px;
+}
+/*page*/
+#page{
+    display:flex;
+    align-items: center;
+}
+#page li:nth-of-type(n+2){
+    padding-left:10px;
+}
+footer{
+    color:#ffffff;
+    text-align: center;
+    font-size:10px;
 }
 /*parts*/
+table{
+    border-collapse: collapse;
+}
 .m-bottom5px{
     margin-bottom: 5px;
 }
@@ -150,43 +235,34 @@ select{
 #time-info{
     font-size: 14px;
 }
-#time-info th{
-    background-color: rgb(234, 255, 192);
-}
+
+
 /*PC用*/
 @media  (min-width: 1000px){
     #wrapper{
         width: 1000px;
     }
     header{
-        display: flex;
+        display:flex;
         align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        padding: 5px;
     }
-    header>h1{
+    main{
+        display:flex;
+    }
+    main aside{
         flex:1;
+        margin-bottom: 0;
     }
-
-    main{        
-        flex-direction: row;
-    }
-    main>aside{
-        flex:1;
-        max-width: 200px;
-        margin-right: 10px;
-    }
-    main>article{
+    article{
         flex:3;
+        margin-right: 5px;
     }
-    main>aside>ul>li{
-        text-align: center;
-        padding: unset;
-        margin-bottom: 10px;
-    }
-    main #time table{
-        font-size: 20px;
-    }
+    /*parts*/
     .pc_only{
-    display:table-cell;
+        display:table-cell;
     }
     .pc_flex{
         display: flex;
@@ -200,5 +276,11 @@ select{
     }
     .list td{
         padding: 10px;
+    }
+    .flex-warp{
+        display:flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
     }
 }

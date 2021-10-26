@@ -14,9 +14,11 @@ $output=[];
 //③正規表現チェック
 if($_SERVER["REQUEST_METHOD"]==="POST"){
     //$_POST情報確認（空の項目有無）
-    require_once "./logic/notification_post_input.php";
+    require_once "./logic/nc_post_input.php";
+    $input=nc_input_check($output);
     //正規表現チェック
-    require_once "./logic/notification_register.php";
+    require_once "./logic/nc_register.php";
+    $input=nc_match_check($output,$input);
 }else{
     //どちらにも当てはまらない場合はログインに戻る。
     $_SESSION["err-form"]="再度、フォームに情報を入力してください。";

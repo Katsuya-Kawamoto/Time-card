@@ -11,12 +11,16 @@ foreach ($result as $row) {
     // データベースのフィールド名で出力
     $info[]=$row;
 }
-
+//現在の日付取得
 require_once "../logic/time_input.php";
 $time=Time_input();                                       //現在の日付取得
+//トークン生成
+require_once '../logic/common_func.php';
+var_dump($output);
 
 $stmt=null;
 $pdo=null;
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,7 +40,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -52,9 +56,12 @@ $pdo=null;
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -85,41 +92,49 @@ $pdo=null;
                 <h2>出力エラー</h2>
                 <p>出力出来る内容が見つかりませんでした。</p>
 <?php else: ?>
-                <form action="./logic/csv_output.php" method="POST">
-                    <p>従業員選択</p>    
-                <table style="width:100%;">
-                    <tbody>
-                        <tr>
-                            <th>社員番号</th>
-                            <th>姓</th>
-                            <th>名</th>
-                            <th>出力</th>
-                        </tr>
+                    <form action="./logic/csv_output.php" method="POST">
+                        <p>従業員選択</p>
+                        <div id="list_output">    
+                            <table style="width:100%;">
+                                <tbody>
+                                    <tr>
+                                        <th>社員番号</th>
+                                        <th>姓</th>
+                                        <th>名</th>
+                                        <th>出力</th>
+                                    </tr>
 <?php foreach($info as $key => $value) :?>
-                        <tr>
-                            <td><?php echo $value["number"];?></td>
-                            <td><?php echo $value["sei"];?></td>
-                            <td><?php echo $value["mei"];?></td>
-                            <td class="delete"><input type="radio" name="check[]" value="<?php echo $value["number"];?>"></td>
-                        </tr>
+                                    <tr>
+                                        <td><?php echo $value["number"];?></td>
+                                        <td><?php echo $value["sei"];?></td>
+                                        <td><?php echo $value["mei"];?></td>
+                                        <td class="delete"><input type="radio" name="check[]" value="<?php echo $value["number"];?>"></td>
+                                    </tr>
 <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <hr>
-                <p>年月を選択してください。</p>
-                    <select name="year" id="year">
+                                </tbody>
+                            </table>
+                        </div>
+                            <hr>
+                        <p>年月を選択してください。</p>
+                        <select name="year" id="year">
 <?php for($i=$time["year"]-1;$i<=$time["year"]+1;$i++):?>
-                        <option value="<?php echo (int)$i;?>" <?php if((int)$time["year"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>年</option>
+                            <option value="<?php echo (int)$i;?>" <?php if((int)$time["year"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>年</option>
 <?php endfor; ?>
-                    </select>
-                    <select name="month" id="month">
+                        </select>
+                        <select name="month" id="month">
 <?php for($i=1;$i<=12;$i++):?>
-                    <option value="<?php echo (int)$i;?>" <?php if((int)$time["month"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>月</option>
+                            <option value="<?php echo (int)$i;?>" <?php if((int)$time["month"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>月</option>
 <?php endfor; ?>
-                    </select>
-                <p style="margin-top:10px;">チェックした項目をまとめて出力<input type="submit" value="出力"></p>
+                        </select>
+<?php if(isset($output["error"])):?>
+                        <p class="error"><?php echo $output["error"];?></p>
+<?php endif; ?>
+                        <p style="margin-top:10px;">チェックした項目をまとめて出力<input type="submit" value="出力"></p>
+                        <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
+                    </div>
                 </form>
 <?php endif; ?>
+
             </article>
         </main>
         <footer>

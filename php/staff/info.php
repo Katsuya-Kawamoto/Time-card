@@ -4,15 +4,15 @@ require "./logic/login.php";
 
 //お知らせ情報取得
 require_once "../logic/common_func.php";
-$title=info_title();                            //件名取得
-$info=info_input($_GET["id"]);                 //記事詳細取得
+$title=info_title();                                                            //件名取得
+$info=info_input($_GET["id"]);                                                  //記事詳細取得
 
 //勤務状況取得
 require_once "../logic/time_input.php";
-$time=Time_input();                                             //現在の日付取得
-$time_info=time_info_input($_SESSION["e-id"],$time["month"]);   //今月の勤怠状況取得
-$time_cl=time_calculation($time_info);                          //総勤務時間算出
-$time_count=time_count($time_info);                             //出勤回数算出
+$time=Time_input();                                                             //現在の日付取得
+$time_info=time_info_input($_SESSION["e-id"],$time["month"],$time["year"]);     //今月の勤怠状況取得
+$time_cl=time_calculation($time_info);                                          //総勤務時間算出
+$time_count=time_count($time_info);                                             //出勤回数算出
 
 //セッション確認
 var_dump($_SESSION);
@@ -39,7 +39,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>勤怠管理</li>
                     <ul>
                         <li><a href="attendance_form.php">登録</a></li>
@@ -49,9 +49,12 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -63,8 +66,8 @@ $pdo=null;
                         <li>現在、新しい情報はありません。</li>
 <?php else: ?>  
                         <li>
-                            <dl>
-                                <dt><b>件名</b></dt>
+                            <dl style="display:flex">
+                                <dt><b>件名:</b></dt>
                                 <dd><?php echo $info["title"];?></dd>
                             </dl>
                         </li>
@@ -88,9 +91,14 @@ $pdo=null;
                         </li>    
                     </ul>
                     <h2>その他の情報</h2>
-                    <ul>
+                    <ul id="n-title">
 <?php foreach($title as $key => $value) :?>
-                        <li><a href="./info.php?id=<?php echo $value["id"];?>"><?php echo $value["title"];?></a></li>
+                        <li>
+                            <a href="./info.php?id=<?php echo $value["id"];?>">
+                                <?php echo $value["title"];?>
+                                <span id="day">|<?php echo $value["created_at"];?></span>
+                            </a>
+                        </li>
 <?php endforeach; ?>
                     </ul>
 <?php endif; ?>
@@ -98,32 +106,44 @@ $pdo=null;
                 <section id="time">
                     <h1><?php echo $time["month"] ?>月の勤務時間 (<?php echo $time["day"] ?>日現在)</h1>
 <?php if(isset($time_info)):?>                    
-                    <table><tbody>
-                        <tr>
-                            <th>勤務日数</th>
-                            <td><?php echo $time_count["work_count"]; ?>日</td>
-                        </tr>
-                        <tr>
-                            <th>勤務時間</th>
-                            <td><?php echo $time_cl["work_time"]; ?>時間<?php printf("%02d", $time_cl["work_minutes"]); ?>分</td>
-                        </tr>
-                        <tr>
-                            <th>残業日数</th>
-                            <td><?php echo $time_count["over_count"]; ?>日</td>
-                        </tr>
-                        <tr>
-                            <th>残業時間</th>
-                            <td><?php echo $time_cl["over_time"]; ?>時間<?php printf("%02d", $time_cl["over_minutes"]); ?>分</td>
-                        </tr>
-                        <tr>
-                            <th>深夜勤務日数</th>
-                            <td><?php echo $time_count["midnight_count"]; ?>日</td>
-                        </tr>
-                        <tr>
-                            <th>深夜勤務時間</th>
-                            <td><?php echo $time_cl["midnight_time"]; ?>時間<?php printf("%02d", $time_cl["midnight_minutes"]); ?>分</td>
-                        </tr>
-                    </tbody></table>
+                    <ul>
+                        <li>
+                            <dl>
+                                <dt>勤務日数</dt>
+                                <dd><?php echo $time_count["work_count"]; ?>日</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt>勤務時間</dt>
+                                <dd><?php echo $time_cl["work_time"]; ?>時間<?php printf("%02d", $time_cl["work_minutes"]); ?>分</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt>残業日数</dt>
+                                <dd><?php echo $time_count["over_count"]; ?>日</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt>残業時間</dt>
+                                <dd><?php echo $time_cl["over_time"]; ?>時間<?php printf("%02d", $time_cl["over_minutes"]); ?>分</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt>深夜勤務日数</dt>
+                                <dd><?php echo $time_count["midnight_count"]; ?>日</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt>深夜勤務時間</dt>
+                                <dd><?php echo $time_cl["midnight_time"]; ?>時間<?php printf("%02d", $time_cl["midnight_minutes"]); ?>分</dd>
+                            </dl>
+                        </li>
+                    </ul>  
 <?php else: ?>
                     <p>入力された勤務情報がありませんでした。。</p>
 <?php endif; ?>

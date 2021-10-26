@@ -2,7 +2,7 @@
 //ログイン
 require_once "./logic/login.php";
 //フォーム内容確認
-require_once "./logic/form_check.php";
+require_once "./logic/nc_form_check.php";
 
 //データベース切断
 $stmt=null;
@@ -28,7 +28,7 @@ var_dump($_SESSION);
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -44,7 +44,12 @@ var_dump($_SESSION);
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li><a href="../logic/logout.php">ログアウト</a></li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -56,7 +61,7 @@ var_dump($_SESSION);
                                 <dt>件名</dt>
                                 <dd>
                                     <ul>
-                                        <li><?php echo $title;?></li>
+                                        <li><?php echo $input["title"];?></li>
                                     </ul>
                                 </dd>
 <?php if(isset($output["err-title"])) :?>
@@ -67,7 +72,7 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>内容</dt>
-                                <dd><?php echo nl2br($contents);?></dd>
+                                <dd><?php echo nl2br($input["contents"]);?></dd>
 <?php if(isset($output["err-contents"])) :?>
                                 <dd class="error"><?php echo $output["err-contents"]; ?></dd>
 <?php endif; ?>
@@ -76,7 +81,7 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>登録者</dt>
-                                <dd><?php echo $name;?></dd>
+                                <dd><?php echo $input["name"];?></dd>
 <?php if(isset($output["err-name"])) :?>
                                 <dd class="error"><?php echo $output["err-name"]; ?></dd>
 <?php endif; ?>
@@ -87,9 +92,9 @@ var_dump($_SESSION);
                             <input type="button" value="戻る" onclick="history.go(-1)">
                         </li>
                     </ul>
-                    <input type="hidden" name="title" value="<?php echo $title;?>">
-                    <input type="hidden" name="contents" value="<?php echo $contents;?>">
-                    <input type="hidden" name="name" value="<?php echo $name;?>">
+                    <input type="hidden" name="title" value="<?php echo $input["title"];?>">
+                    <input type="hidden" name="contents" value="<?php echo $input["contents"];?>">
+                    <input type="hidden" name="name" value="<?php echo $input["name"];?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $_POST["csrf_token"]; ?>">
 <?php if(isset($_POST["id"])):?>
                     <input type="hidden" name="id" id="id" value="<?php echo $_POST["id"];?>">

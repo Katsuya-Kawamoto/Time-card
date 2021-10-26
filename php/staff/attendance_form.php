@@ -17,6 +17,27 @@ if($flag){                                              //編集の条件に合�
     $time=Time_input();                                 //現在の日付取得
     $title="投稿";
 }
+/* 
+フォームに情報代入
+①エラーで情報が返って来た場合は入力した情報を返す
+②上記が無くて、リストからアクセスされた場合は選択されたKEYの情報を返す
+*/
+$input=[];
+//form情報を返す
+if(isset($output["Day"])){                          //①エラー情報があった場合
+    foreach($output as $o_key => $o_value){
+        if(isset($o_value)){                        //引数inputに代入
+            $input[$o_key]=$o_value;
+        }  
+    }
+}else if(isset($result)){                           //②リストから情報の取得を選択された場合
+    foreach($result as $r_key => $r_value){
+        if(isset($r_value)){                        //引数にinput代入
+            $input[$r_key]=$r_value;
+        }
+    }
+}   
+
 //セッション確認
 var_dump($_SESSION);
 //データベース切断
@@ -40,8 +61,8 @@ $pdo=null;
             <div><?php echo $_SESSION["header-sei"];?>さん、お疲れ様です。</div>
         </header>
         <main>
-        <aside>
-                <ul>
+            <aside>
+                <ul id="menu">
                     <li>勤怠管理</li>
                     <ul>
                         <li><a href="attendance_form.php">登録</a></li>
@@ -51,9 +72,12 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -77,9 +101,9 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>勤務日</dt>
-                                <dd>年:<input type="text" name="year" id="year" size="10" value="<?php echo ($flag)?$result["year"]:$time["year"];?>" required>年</dd>
-                                <dd>月:<input type="text" name="month" id="month" size="10" value="<?php echo ($flag)?$result["month"]:$time["month"];?>" required>月</dd>
-                                <dd>日:<input type="text" name="day" id="day" size="10" value="<?php echo ($flag)?$result["day"]:$time["day"];?>" required>日</dd>
+                                <dd>年:<input type="text" name="year" id="year" size="10" value="<?php echo ($flag)?$input["year"]:$time["year"];?>" required>年</dd>
+                                <dd>月:<input type="text" name="month" id="month" size="10" value="<?php echo ($flag)?$input["month"]:$time["month"];?>" required>月</dd>
+                                <dd>日:<input type="text" name="day" id="day" size="10" value="<?php echo ($flag)?$input["day"]:$time["day"];?>" required>日</dd>
 <?php if(isset($output["err-year"])) :?>
                                 <dd class="error"><?php echo $output["err-year"]; ?></dd>
 <?php endif; ?>
@@ -96,8 +120,8 @@ $pdo=null;
                                 <dt>勤務形態</dt>
                                 <dd>
                                     <select name="work_type" id="work_type">
-                                        <option value="0" <?php if(isset($result)&&(int)$result["work_type"]===0) echo "selected";?>>通常勤務</option>
-                                        <option value="1" <?php if(isset($result)&&(int)$result["work_type"]===1) echo "selected";?>>休日出勤</option>
+                                        <option value="0" <?php if(isset($input["work_type"])&&(int)$input["work_type"]===0) echo "selected";?>>通常勤務</option>
+                                        <option value="1" <?php if(isset($input["work_type"])&&(int)$input["work_type"]===1) echo "selected";?>>休日出勤</option>
                                     </select>
                                 </dd>
 <?php if(isset($output["err-work_type"])) :?>
@@ -112,38 +136,44 @@ $pdo=null;
                                         <li style="margin-right:5px;">開始時間：
                                             <select name="s_time" id="s_time">
 <?php for($i=8;$i<24;$i++):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["s_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["s_time"])&&(int)$input["s_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
 <?php endfor; ?>
 <?php for($i=0;$i<8;$i++):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["s_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["s_time"])&&(int)$input["s_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
 <?php endfor; ?>
                                             </select>
                                         </li>
                                         <li>
                                             <select name="s_minutes" id="s_minutes">
 <?php for($i=0;$i<60;$i+=15):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["s_minutes"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>分</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["s_minutes"])&&(int)$input["s_minutes"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>分</option>
 <?php endfor; ?>
                                             </select>
+                                        </li>
+                                        <li  id="next_s" style="display:none">
+                                            <span style="color:red;">(翌日)</span>
                                         </li>
                                     </ul>
                                     <ul style="display:flex">
                                         <li style="margin-right:5px;">終了時間：
                                             <select name="e_time" id="e_time">
 <?php for($i=8;$i<24;$i++):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["e_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["e_time"])&&(int)$input["e_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
 <?php endfor; ?>
 <?php for($i=0;$i<8;$i++):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["e_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["e_time"])&&(int)$input["e_time"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>時</option>
 <?php endfor; ?>
                                             </select>
                                         </li>
                                         <li>
                                             <select name="e_minutes" id="e_minutes">
 <?php for($i=0;$i<60;$i+=15):?>
-                                                <option value="<?php echo (int)$i;?>" <?php if(isset($result)&&(int)$result["e_minutes"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>分</option>
+                                                <option value="<?php echo (int)$i;?>" <?php if(isset($input["e_minutes"])&&(int)$input["e_minutes"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>分</option>
 <?php endfor; ?>
                                             </select>
+                                        </li>
+                                        <li id="next_e" style="display:none">
+                                            <span style="color:red;">(翌日)</span>
                                         </li>
                                     </ul>
                                 </dd>
@@ -170,8 +200,8 @@ $pdo=null;
                                 <dt>勤務時間</dt>
                                 <dd>
                                     <span class="over" style="display:none" style="color:red;">(休日出勤なので時間外でカウント)<br></span>
-                                    <span id="work_time"><?php echo ($flag)?(int)$result["work_time"]:0;?></span>時間
-                                    <span id="work_minutes"><?php echo ($flag)?(int)$result["work_minutes"]:0;?></span>分
+                                    <span id="work_time"><?php echo ($flag)?(int)$input["work_time"]:0;?></span>時間
+                                    <span id="work_minutes"><?php echo ($flag)?(int)$input["work_minutes"]:0;?></span>分
                                 </dd>
 <?php if(isset($output["err-work_time"])) :?>
                                 <dd class="error"><?php echo $output["err-work_time"]; ?></dd>
@@ -180,9 +210,9 @@ $pdo=null;
                                 <dd class="error"><?php echo $output["err-work_minutes"]; ?></dd>
 <?php endif; ?>
                                 <dt>休憩時間</dt>                      
-                                <dd>
-                                    <input type="text" name="break_times" id="break_time" size="10" value="<?php echo ($flag)?(int)$result["break_time"]:0;?>">時間
-                                    <input type="text" name="break_minutes" id="break_minutes" size="10" value="<?php echo ($flag)?(int)$result['break_minutes']:0; ?>" required>分
+                                <dd style="display:flex;flex-wrap: wrap;">
+                                    <li><input type="text" name="break_times" id="break_time" size="10" value="<?php echo ($flag)?(int)$input["break_time"]:0;?>">時間</li>
+                                    <li><input type="text" name="break_minutes" id="break_minutes" size="10" value="<?php echo ($flag)?(int)$input['break_minutes']:0; ?>" required>分</li>
                                 </dd>
 <?php if(isset($output["err-break_time"])) :?>
                                 <dd class="error"><?php echo $output["err-break_time"]; ?></dd>
@@ -192,9 +222,9 @@ $pdo=null;
 <?php endif; ?>
 
                                 <dt>深夜勤務時間</dt>
-                                <dd>
-                                    <input type="text" name="midnight_times" id="midnight_time" size="10" value="<?php echo ($flag)?(int)$result["midnight_time"]:0;?>" required>時間
-                                    <input type="text" name="midnight_minutess" id="midnight_minutes" size="10" value="<?php echo ($flag)?(int)$result["midnight_minutes"]:0;?>" required>分
+                                <dd style="display:flex;flex-wrap: wrap;">
+                                    <li><input type="text" name="midnight_times" id="midnight_time" size="10" value="<?php echo ($flag)?(int)$input["midnight_time"]:0;?>" required>時間</li>
+                                    <li><input type="text" name="midnight_minutess" id="midnight_minutes" size="10" value="<?php echo ($flag)?(int)$input["midnight_minutes"]:0;?>" required>分</li>
                                 </dd>
 <?php if(isset($output["err-midnight_time"])) :?>
                                 <dd class="error"><?php echo $output["err-midnight_time"]; ?></dd>
@@ -205,14 +235,14 @@ $pdo=null;
                                 <dt>時間外労働</dt>
                                 <dd>
                                     <span class="over" style="display:none" style="color:red;">(休日出勤)</span>
-                                    <span id="over_time"><?php echo ($flag)?(int)$result["over_time"]:0;?></span>時間
-                                    <span id="over_minutes"><?php echo ($flag)?(int)$result["over_minutes"]:0;?></span>分
+                                    <span id="over_time"><?php echo ($flag)?(int)$input["over_time"]:0;?></span>時間
+                                    <span id="over_minutes"><?php echo ($flag)?(int)$input["over_minutes"]:0;?></span>分
                                 </dd>
                                 <dd style="display:none;" id="over_time_reason">
                                     <ul>
                                         <li><b>時間外業務内容</b></li>
                                         <li>
-                                            <textarea name="over_time_reason" style="border:1px solid black; margin-top:5px" rows="10" cols="50" placeholder="時間外の業務内容（引き継ぎ・残務処理など）"><?php if(isset($result["over_time_reason"])) echo $result["over_time_reason"];?></textarea>
+                                            <textarea name="over_time_reason" style="border:1px solid black; margin-top:5px" rows="10" cols="50" placeholder="時間外の業務内容（引き継ぎ・残務処理など）"><?php if(isset($input["over_time_reason"])) echo $input["over_time_reason"];?></textarea>
                                         </li>
                                     </ul>
                                 </dd>

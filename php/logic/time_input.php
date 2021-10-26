@@ -35,16 +35,17 @@ function Time_input(){
  * @param        $month  -> 月
  * @return array $result ->　勤怠情報 
  */
-function time_info_input($number,$month){
+function time_info_input($number,$month,$year){
     $sql="  SELECT * FROM `working_hours` 
             LEFT OUTER JOIN `working_time` ON working_hours.keey = working_time.keey 
             LEFT OUTER JOIN `over_time_reason` ON working_hours.keey = over_time_reason.keey
             LEFT OUTER JOIN `working_info` ON working_hours.keey = working_info.keey 
-            WHERE number=:number AND month=:month
+            WHERE number=:number AND month=:month AND year=:year
             ORDER BY day ASC";
     $stmt=connect()->prepare($sql);
     $stmt->bindParam(':number',$number);
     $stmt->bindParam(':month',$month);
+    $stmt->bindParam(':year',$year);
     $stmt->execute();
     $result=$stmt->fetchAll();
 

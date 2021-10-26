@@ -44,7 +44,7 @@
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -60,7 +60,12 @@
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li><a href="../logic/logout.php">ログアウト</a></li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -70,47 +75,49 @@
                     <h2>出力エラー</h2>
                     <p>出力出来る内容が見つかりませんでした。</p>
 <?php else: ?>
-                <form action="notification_delete_verification.php" method="POST">
-                    <table style="width:100%;">
-                        <tbody>
-                            <tr>
-                                <th>id</th>
-                                <th>件名</th>
-                                <th class="pc_only">内容</th>
-                                <th>投稿者</th>
-                                <th class="pc_only">投稿日時</th>
-                                <th>編集</th>
-                                <th>削除</th>
-                            </tr>   
+                <div id="list_output">
+                    <form action="notification_delete_verification.php" method="POST">
+                        <table style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <th>id</th>
+                                    <th>件名</th>
+                                    <th class="pc_only">内容</th>
+                                    <th>投稿者</th>
+                                    <th class="pc_only">投稿日時</th>
+                                    <th>編集</th>
+                                    <th>削除</th>
+                                </tr>   
 <?php foreach($info as $key => $value) :?>
-                            <tr>
-                                <td><?php echo $value["id"];?></td>
-                                <td><?php echo $value["title"];?></td>
+                                <tr>
+                                    <td><?php echo $value["id"];?></td>
+                                    <td><?php echo $value["title"];?></td>
 <?php if(strlen($value["contents"])>30): ?>
-                                <td class="pc_only"><?php echo substr($value["contents"], 0, 30)."...";?></td>
+                                    <td class="pc_only"><?php echo substr($value["contents"], 0, 30)."...";?></td>
 <?php else: ?>
-                                <td class="pc_only"><?php echo $value["contents"];?></td>
+                                    <td class="pc_only"><?php echo $value["contents"];?></td>
 <?php endif; ?>
-                                <td><?php echo $value["name"];?></td>
-                                <td class="pc_only"><?php echo substr($value["created_at"],0,10);?></td>
-                                <td><a href="./notification_form.php?id=<?php echo $value["id"];?>">編集</a></td>
-                                <td class="delete"><input type="checkbox" name="checkbox[]" value="<?php echo $value["id"];?>"></td>
-                            </tr>
+                                    <td><?php echo $value["name"];?></td>
+                                    <td class="pc_only"><?php echo substr($value["created_at"],0,10);?></td>
+                                    <td><a href="./notification_form.php?id=<?php echo $value["id"];?>">編集</a></td>
+                                    <td class="delete"><input type="checkbox" name="checkbox[]" value="<?php echo $value["id"];?>"></td>
+                                </tr>
 <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
 <?php if(isset($output["err-form"])) :?>
-                                <p class="error"><?php echo $output["err-form"]; ?></ｐ>
+                        <p class="error"><?php echo $output["err-form"]; ?></ｐ>
 <?php endif; ?>
-                    <p style="text-align: right; margin-top:10px;">チェックした項目をまとめて削除<input type="submit" value="削除"></p>
-                    <ul id="page" style="display:flex;">
-                        <li>Page:</li>
+                        <p>チェックした項目をまとめて削除<input type="submit" value="削除"></p>
+                        <ul id="page">
+                            <li>Page:</li>
 <?php for($i=1;$i<=$page;$i++): ?>
-                        <li style="padding-left:10px;"><a href="notification_list.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                            <li><a href="notification_list.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
 <?php endfor;?>
-                    </ul>
-                    <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
-                </form>
+                        </ul>
+                        <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
+                    </form>
+                </div>
 <?php endif; ?>
             </article>
         </main>

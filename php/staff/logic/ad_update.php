@@ -1,6 +1,6 @@
 <?php
     $number=$_SESSION["e-id"];
-    $key=$Year.$Month.$Day."_".$number;
+    $key=$input["Year"].$input["Month"].$input["Day"]."_".$number;
 
     $sql="  UPDATE `working_hours` 
             SET `number`=:number,`year`=:year,`month`=:month,`day`=:day,`work_type`=:work_type
@@ -9,10 +9,10 @@
     $stmt = connect() -> prepare($sql);
     $stmt->bindParam(':keey',$key);
     $stmt->bindParam(':number',$number);
-    $stmt->bindParam(':year',$year);
-    $stmt->bindParam(':month',$month);
-    $stmt->bindParam(':day',$day);
-    $stmt->bindParam(':work_type',$work_type);
+    $stmt->bindParam(':year',$input["Year"]);
+    $stmt->bindParam(':month',$input["Month"]);
+    $stmt->bindParam(':day',$input["Day"]);
+    $stmt->bindParam(':work_type',$input["work_type"]);
     $stmt->execute();
 
     //勤務時間
@@ -23,10 +23,10 @@
                 
     $stmt = connect() -> prepare($sql);
     $stmt->bindParam(':keey',$key);
-    $stmt->bindParam(':s_time',$s_time);
-    $stmt->bindParam(':s_minutes',$s_minutes);
-    $stmt->bindParam(':e_time',$e_time);
-    $stmt->bindParam(':e_minutes',$e_minutes);
+    $stmt->bindParam(':s_time',$input["s_time"]);
+    $stmt->bindParam(':s_minutes',$input["s_minutes"]);
+    $stmt->bindParam(':e_time',$input["e_time"]);
+    $stmt->bindParam(':e_minutes',$input["e_minutes"]);
     $stmt->bindParam(':created_at',$time["created_at"]);
     $stmt->execute();
 
@@ -38,14 +38,14 @@
             WHERE `keey`=:keey";
     $stmt = connect() -> prepare($sql);
     $stmt->bindParam(':keey',$key);
-    $stmt->bindParam(':work_time',$work_time);
-    $stmt->bindParam(':work_minutes',$work_minutes);
-    $stmt->bindParam(':break_time',$break_time);
-    $stmt->bindParam(':break_minutes',$break_minutes);
-    $stmt->bindParam(':midnight_time',$midnight_time);
-    $stmt->bindParam(':midnight_minutes',$midnight_minutes);
-    $stmt->bindParam(':over_time',$over_time);
-    $stmt->bindParam(':over_minutes',$over_minutes);
+    $stmt->bindParam(':work_time',$input["work_time"]);
+    $stmt->bindParam(':work_minutes',$input["work_minutes"]);
+    $stmt->bindParam(':break_time',$input["break_time"]);
+    $stmt->bindParam(':break_minutes',$input["break_minutes"]);
+    $stmt->bindParam(':midnight_time',$input["midnight_time"]);
+    $stmt->bindParam(':midnight_minutes',$input["midnight_minutes"]);
+    $stmt->bindParam(':over_time',$input["over_time"]);
+    $stmt->bindParam(':over_minutes',$input["over_minutes"]);
     $stmt->execute();
 
 if($over_time_flag){
@@ -61,7 +61,7 @@ if($over_time_flag){
                     WHERE `keey`=:keey"; 
             $stmt = connect() -> prepare($sql);
             $stmt->bindParam(':keey',$key);
-            $stmt->bindParam(':over_time_reason',$over_time_reason);
+            $stmt->bindParam(':over_time_reason',$input["over_time_reason"]);
             $stmt->execute();
     }else{
         //勤務情報
@@ -69,7 +69,7 @@ if($over_time_flag){
                 VALUES (:keey,:over_time_reason)";
         $stmt = connect() -> prepare($sql);
         $stmt->bindParam(':keey',$key);
-        $stmt->bindParam(':over_time_reason',$over_time_reason);
+        $stmt->bindParam(':over_time_reason',$input["over_time_reason"]);
         $stmt->execute();
     }
     
@@ -79,10 +79,11 @@ if(count($output)>0){
     //エラーがあった場合は戻す
     $output["header-sei"]=$_SESSION["header-sei"];
     $output["e-id"]=$_SESSION['e-id'];
-    $_SESSION["test"]="問題無し";
-    //$output[]=$_SESSION;
+    //入力された情報を$outputに返す
+    foreach($input as $key => $value){
+        $output[$key]=$value;
+    }
     $_SESSION=$output;
-    //$pdo=null;
     unset($_SESSION["key"]);
     header('Location: attendance_form.php');
     return;

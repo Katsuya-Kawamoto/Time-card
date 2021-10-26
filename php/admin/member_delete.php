@@ -28,7 +28,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -44,9 +44,12 @@ $pdo=null;
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>

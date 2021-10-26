@@ -17,6 +17,22 @@ if($flag){//編集の条件に合ったらデータ取得
     $title="登録";
     $max_no=(int)$member->member_no_max()+1;//社員番号の最大値
 }
+//エラーの場合はフォームに値を返す
+$input=[];
+//form情報を返す
+if(isset($output["number"])){                          //①エラー情報があった場合
+    foreach($output as $o_key => $o_value){
+        if(isset($o_value)){                        //引数inputに代入
+            $input[$o_key]=$o_value;
+        }  
+    }
+}else if(isset($result)){                           //②リストから情報の取得を選択された場合
+    foreach($result as $r_key => $r_value){
+        if(isset($r_value)){                        //引数にinput代入
+            $input[$r_key]=$r_value;
+        }
+    }
+}  
 
 $stmt=null;
 $pdo=null;
@@ -41,7 +57,7 @@ var_dump($_SESSION);
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -57,9 +73,12 @@ var_dump($_SESSION);
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -72,9 +91,9 @@ var_dump($_SESSION);
                                 <dd>
                                     <ul>
 <?php if($flag):?>
-                                        <li><?php echo $result["number"];?></li>
+                                        <li><?php echo $input["number"];?></li>
 <?php else: ?>
-                                        <li><input type="text" name="number" id="number" value="<?php echo $max_no ;?>"></li>
+                                        <li><input type="text" name="number" id="number" value="<?php echo (isset($input["number"]))?$input["number"]:$max_no ;?>"></li>
 <?php endif; ?>                          
                                     </ul>
                                 </dd>
@@ -86,8 +105,8 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>名前</dt>
-                                <dd>性:<input type="text" name="sei" id="sei" value="<?php if($flag)echo $result["sei"];?>" required></dt>
-                                <dd>名:<input type="text" name="mei" id="mei" value="<?php if($flag)echo $result["mei"];?>" required></dd>
+                                <dd>性:<input type="text" name="sei" id="sei" value="<?php if(isset($input["sei"]))echo $input["sei"];?>" required></dt>
+                                <dd>名:<input type="text" name="mei" id="mei" value="<?php if(isset($input["mei"]))echo $input["mei"];?>" required></dd>
 <?php if(isset($output["err-sei"])) :?>
                                 <dd class="error"><?php echo $output["err-sei"]; ?></dd>
 <?php endif; ?>
@@ -123,7 +142,7 @@ var_dump($_SESSION);
                     </ul>
                     <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
 <?php if($flag):?>
-                    <input type="hidden" name="number" value="<?php echo $result["number"];?>">
+                    <input type="hidden" name="number" value="<?php echo $input["number"];?>">
                     <input type="hidden" name="edit" value="true">
 <?php endif;?>
                 </form>

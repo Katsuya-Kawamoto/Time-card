@@ -62,7 +62,7 @@ class db{
      * @param    無し   
      * @return   $stmt メンバーの一覧取得結果
      */
-    function member_list(){
+    function member_list($offset=0,$count=100){
         $sql="  SELECT `number`,`sei`,`mei` 
                 FROM `staff`";
         //sqlに接続して、同じアドレスがあるかチェック
@@ -70,13 +70,25 @@ class db{
             $number=$_GET["number"];
             $sql .= " WHERE `number`=:number";
         }
-        $sql .= " ORDER BY `number` ASC";
+        $sql .= "ORDER BY `number` ASC LIMIT ".$offset.",".$count;
         $stmt=connect()->prepare($sql);
         if(isset($_GET["number"])&&strlen($_GET["number"])>0)$stmt->bindParam(':number',$number);
         $stmt->execute();
         $result=$stmt->fetchAll();//結果があるか取得
         return $result;
-        
+    }
+
+    /**
+     * 従業員件数取得
+     *
+     * @return $count ->お知らせ件数
+     */
+    function member_count(){
+        $sql="SELECT COUNT(`number`) FROM `staff`";
+        $stmt= connect()->prepare($sql);
+        $stmt->execute();
+        $count=$stmt->fetch();//件数
+        return $count;
     }
 
     /**社員番号の最大値取得

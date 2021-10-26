@@ -22,9 +22,9 @@
     //③正規表現チェック
     if($_SERVER["REQUEST_METHOD"]==="POST"){
         //変数へ代入（空欄が無いか確認）
-        require_once "./logic/db_post_input.php";
+        require_once "./logic/mb_post_input.php";
         //入力内容のチェック
-        require_once "./logic/db_register.php";
+        require_once "./logic/mb_register.php";
     }else{
         //どちらにも当てはまらない場合はログインに戻る。
         $_SESSION["err-form"]="再度、フォームに情報を入力してください。";

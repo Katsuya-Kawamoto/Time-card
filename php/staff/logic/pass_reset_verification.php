@@ -39,6 +39,8 @@
 
     if($pass!==$pass_conf){
         $output["err-pass_conf"]='パスワードと確認パスワードが一致しません。';
+    }else if(!preg_match("/^[0-9]{6}$/",$pass_conf)){
+        $output["err-pass_conf"]='パスワードは英数字6文字にしてください。';
     }else{  
         //sqlに接続して、同じアドレスがあるかチェック
         $sql="SELECT * FROM `staff` WHERE `number`=:number";
@@ -47,7 +49,9 @@
         $stmt->execute();
         $result=$stmt->fetch();
         
-        if(!password_verify($old_pass, $result["pass"])){
+        if(!isset($result)){
+            $output["err-pass"]='社員情報取得エラー。';
+        }else if(!password_verify($old_pass, $result["pass"])){
             $output["err-pass"]='パスワードが違います。';
         }
         $stmt=null;
@@ -57,6 +61,9 @@
         //エラーがあった場合は戻す
         $output["header-sei"]=$_SESSION["header-sei"];
         $output["e-id"]=$_SESSION['e-id'];
+        $output["old_pass"]=$old_pass;
+        $output["pass"]=$pass;
+        $output["pass_conf"]=$pass_conf;
         $_SESSION=$output;
         header('Location: ./pass_reset.php');
         return;

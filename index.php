@@ -9,7 +9,7 @@ $session->destroy();//セッション情報の削除
 
 //トークン生成
 $session->start();//セッションスタート
-require_once './php/admin/logic/functions.php';
+require_once './php/logic/common_func.php';
 var_dump($_SESSION);
 ?>
 <!DOCTYPE html>

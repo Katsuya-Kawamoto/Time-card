@@ -9,10 +9,10 @@
     $db=new db();
     if($flag){
         //更新
-        $db->menber_info_update($number,$sei,$mei);
+        $db->menber_info_update($input["number"],$input["sei"],$input["mei"]);
     }else{
         //アップロード
-        $db->member_insert($number,$sei,$mei);
+        $db->member_insert($input["number"],$input["sei"],$input["mei"]);
     }
     //トークン削除
     unset($_SESSION['csrf_token']);
@@ -38,7 +38,7 @@
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -54,9 +54,12 @@
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article id="form">
@@ -68,7 +71,7 @@
                                 <dt>社員No.</dt>
                                 <dd>
                                     <ul>
-                                        <li><?php echo $number; ?></li>
+                                        <li><?php echo $input["number"]; ?></li>
                                     </ul>
                                 </dt>
                             </dl>
@@ -76,7 +79,7 @@
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>名前</dt>
-                                <dd><?php echo $sei." ".$mei; ?>さん</dt>
+                                <dd><?php echo $input["sei"]." ".$input["mei"]; ?>さん</dt>
                             </dl>
                         </li>
 <?php if(!$flag): ?>

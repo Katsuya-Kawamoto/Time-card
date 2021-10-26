@@ -2,7 +2,7 @@
 //ログイン
 require_once "./logic/login.php";
 //フォーム内容確認
-require_once "./logic/form_check.php";
+require_once "./logic/nc_form_check.php";
 //現在の日付取得
 require_once "../logic/time_input.php";
 $time=Time_input();                                             
@@ -11,10 +11,10 @@ require_once "./logic/db_access.php";
 $db=new db();
 if(!isset($_POST["id"])){//$_POST["id"]があるか
     //投稿
-    $db->notification_insert($title,$contents,$name,$time["created_at"]);
+    $db->notification_insert($input["title"],$input["contents"],$input["name"],$time["created_at"]);
 }else{
     //更新
-    $db->notification_update($_POST["id"],$title,$contents,$name,$time["created_at"]);
+    $db->notification_update($_POST["id"],$input["title"],$input["contents"],$input["name"],$time["created_at"]);
 }
 
 //トークン削除
@@ -44,7 +44,7 @@ var_dump($_SESSION);
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -60,7 +60,12 @@ var_dump($_SESSION);
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li><a href="../logic/logout.php">ログアウト</a></li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -71,7 +76,7 @@ var_dump($_SESSION);
                                 <dt>件名</dt>
                                 <dd>
                                     <ul>
-                                        <li><?php echo $title;?></li>
+                                        <li><?php echo $input["title"];?></li>
                                     </ul>
                                 </dd>
 <?php if(isset($output["err-title"])) :?>
@@ -82,7 +87,7 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>内容</dt>
-                                <dd><?php echo nl2br($contents);?></dd>
+                                <dd><?php echo nl2br($input["contents"]);?></dd>
 <?php if(isset($output["err-contents"])) :?>
                                 <dd class="error"><?php echo $output["err-contents"]; ?></dd>
 <?php endif; ?>
@@ -91,7 +96,7 @@ var_dump($_SESSION);
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>登録者</dt>
-                                <dd><?php echo $name;?></dd>
+                                <dd><?php echo $input["name"];?></dd>
 <?php if(isset($output["err-name"])) :?>
                                 <dd class="error"><?php echo $output["err-name"]; ?></dd>
 <?php endif; ?>

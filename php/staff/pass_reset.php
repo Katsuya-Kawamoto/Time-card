@@ -27,7 +27,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>勤怠管理</li>
                     <ul>
                         <li><a href="attendance_form.php">登録</a></li>
@@ -37,9 +37,12 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -49,7 +52,7 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>現在のパスワード</dt>
-                                <dd><input type="password" name="old_pass" id="old_pass" required></dd>
+                                <dd><input type="password" name="old_pass" id="old_pass" <?php if(isset($output["old_pass"]))echo 'value="'.$output["old_pass"].'"';?> required></dd>
 <?php if(isset($output["err-old_pass"])) :?>
                                 <dd class="error"><?php echo $output["err-old_pass"]; ?></dd>
 <?php endif; ?>
@@ -58,7 +61,7 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>現在のパスワード</dt>
-                                <dd><input type="password" name="pass" id="pass" required></dd>
+                                <dd><input type="password" name="pass" id="pass"  <?php if(isset($output["pass"]))echo 'value="'.$output["pass"].'"';?>  required></dd>
                                 <dd>*半角数字6文字</dd>
 <?php if(isset($output["err-pass"])) :?>
                                 <dd class="error"><?php echo $output["err-pass"]; ?></dd>

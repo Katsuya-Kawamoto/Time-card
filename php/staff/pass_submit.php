@@ -36,7 +36,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>勤怠管理</li>
                     <ul>
                         <li><a href="attendance_form.php">登録</a></li>
@@ -46,9 +46,12 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>

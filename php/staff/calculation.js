@@ -39,6 +39,8 @@
      * 時間外理由表示
      */
     const o_t_r = document.getElementById("over_time_reason");              //時間外理由
+    const next_s = document.getElementById("next_s");                       //翌日（勤務開始）
+    const next_e = document.getElementById("next_e");                       //翌日（勤務終了）
 
 
     /**
@@ -70,6 +72,10 @@
     b_minutes.addEventListener('change', blank_calculation);
 
     function change_w_time(e_time,s_time,s_minutes,e_minutes){
+        //翌日判定
+        //next_day(e_time,s_time);
+        //休日出勤comment表示判定
+        comment(w_type.value == 1);
         //１ー１．拘束時間算出（開始時間ー終了時間）
         stay_times(e_time,s_time,s_minutes,e_minutes);  
         //１－２．休憩時間算出
@@ -90,6 +96,36 @@
         //５．深夜時間算出（22時ー5時に該当する時間）- 休憩時間
         midnight_times(e_time,s_time,s_minutes,e_minutes,b_time.value,b_minutes.value);
     }
+    //comment表示判定
+    function comment(){
+        if(w_type.value == 1){                          //休日出勤の場合
+            for(let i=0; i<over.length; i++){                   //(休日出勤表示)
+                over[i].style.display="inline";
+            }
+        }else{
+            for(let i=0; i<over.length; i++){                   //(休日出勤表示)
+                over[i].style.display="none";
+            }
+        }
+    }
+
+    /*
+    function next_day(e_time,s_time){
+
+        if(s_time>=0 && s_time<=7){
+            next_s.style.display="inline";
+            next_e.style.display="inline";
+        }else{
+            next_s.style.display="none";
+        }
+
+        if((e_time>s_time)){
+            next_e.style.display="inline";
+        }else{
+            next_e.style.display="none";
+        }
+    }
+    */
 
     //１－１．拘束時間算出
     function stay_times(e_time,s_time,s_minutes,e_minutes){
@@ -180,20 +216,12 @@
                 } 
                 //②時計算
                 let over_time =  stay_time - break_time;                //時間外=拘束時間-休憩時間
-
                 if(w_type.value == 1){                                  //勤務形態が時間外勤務の場合
                     o_time.textContent      = over_time;                //そのまま出力
                     o_minutes.textContent   = over_minutes;
-                    for(let i=0; i<over.length; i++){                   //(休日出勤表示)
-                        over[i].style.display="inline";
-                    }            
                 }else if(over_time >= 8){                               //通常勤務でo_timeが8時間以上ある場合
                     o_time.textContent      = over_time - 8;            //8時間を引いた数を時間外労働にする。
                     o_minutes.textContent   = over_minutes; 
-                }else{
-                    for(let i=0; i<over.length; i++){                   //(休日出勤表示)
-                        over[i].style.display="none";
-                    }   
                 }
             }else{                                                      //勤務時間が8時間に満たない場合は0を返す。
                     o_time.textContent      = 0;            

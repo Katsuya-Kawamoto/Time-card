@@ -25,7 +25,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -41,12 +41,15 @@ $pdo=null;
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
-            <article>
+            <article id="list_output">
                 <h1>削除確認</h1>
                 <form action="member_delete.php" method="POST">
                     <h2>以下の内容を削除します。</h2>
@@ -65,19 +68,19 @@ $pdo=null;
                                 <td><?php echo $value["mei"];?></td>
                             </tr>
 <?php endforeach; ?>
-                            <tr>
-                                <th colspan="7">
-<?php foreach($check as $value_a):?>
-                                    <input type="hidden" name="checkbox[]" value="<?php echo $value_a;?>">
-<?php endforeach; ?>
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_POST['csrf_token'];?>">
-                                    <input type="hidden" name="key" value="key"> 
-                                    <input type="submit" value="削除">
-                                    <input type="button" value="戻る" onclick="history.go(-1)">
-                            </th>
-                            </tr>
                         </tbody>
                     </table>
+                    <p>
+                        <input type="submit" value="削除">
+                        <input type="button" value="戻る" onclick="history.go(-1)">
+                    </p>
+
+<?php foreach($check as $value_a):?>
+                    <input type="hidden" name="checkbox[]" value="<?php echo $value_a;?>">
+<?php endforeach; ?>
+                    <input type="hidden" name="csrf_token" value="<?php echo $_POST['csrf_token'];?>">
+                    <input type="hidden" name="key" value="key"> 
+                                    
                 </form>
             </article>
         </main>

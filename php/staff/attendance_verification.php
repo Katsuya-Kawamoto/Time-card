@@ -28,8 +28,8 @@ $pdo=null;
             <div><?php echo $_SESSION["header-sei"];?>さん、お疲れ様です。</div>
         </header>
         <main>
-        <aside>
-                <ul>
+            <aside>
+                <ul id="menu">
                     <li>勤怠管理</li>
                     <ul>
                         <li><a href="attendance_form.php">登録</a></li>
@@ -39,9 +39,12 @@ $pdo=null;
                     <ul>
                         <li><a href="pass_reset.php">変更</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -66,25 +69,25 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>勤務日</dt>
-                                <dd><?php echo $Year;?>年<?php echo $Month;?>月<?php echo $Day;?>日</dd>
+                                <dd><?php echo $input["Year"];?>年<?php echo $input["Month"];?>月<?php echo $input["Day"];?>日</dd>
                             </dl>
                         </li>
                         <li>
                         <dl class="m-bottom5px">
                                 <dt>勤務形態</dt>
-                                <dd><?php echo $worktype_arr[$work_type];?></dd>
+                                <dd><?php echo $worktype_arr[$input["work_type"]];?></dd>
                         </li>
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>勤務時間</dt>
                                 <dd>
                                     <ul style="display:flex">
-                                        <li style="margin-right:5px;">開始時間：<?php echo $s_time;?>時</li>
-                                        <li><?php echo $s_minutes;?>分</li>
+                                        <li style="margin-right:5px;">開始時間：<?php echo $input["s_time"];?>時</li>
+                                        <li><?php echo $input["s_minutes"];?>分</li>
                                     </ul>
                                     <ul style="display:flex">
-                                        <li style="margin-right:5px;">終了時間：<?php echo $e_time;?>時</li>
-                                        <li><?php echo $e_minutes;?>分</li>
+                                        <li style="margin-right:5px;">終了時間：<?php echo $input["e_time"];?>時</li>
+                                        <li><?php echo $input["e_minutes"];?>分</li>
                                     </ul>
                                 </dd>
                             </dl>
@@ -92,16 +95,16 @@ $pdo=null;
                         <li>
                             <dl class="m-bottom5px">
                                 <dt>勤務時間</dt>
-                                <dd><?php echo $work_time;?>時間<?php echo $work_minutes;?>分</dd>
+                                <dd><?php echo $input["work_time"];?>時間<?php echo $input["work_minutes"];?>分</dd>
                                 <dt>休憩時間</dt>
-                                <dd><?php echo $break_time;?>時間<?php echo $break_minutes;?>分</dd>
+                                <dd><?php echo $input["break_time"];?>時間<?php echo $input["break_minutes"];?>分</dd>
                                 <dt>深夜勤務時間</dt>
-                                <dd><?php echo $midnight_time;?>時間<?php echo $midnight_minutes;?>分</dd>
+                                <dd><?php echo $input["midnight_time"];?>時間<?php echo $input["midnight_minutes"];?>分</dd>
                                 <dt>時間外労働</dt>
-                                <dd><?php echo $over_time;?>時間<?php echo $over_minutes;?>分</dd>
-<?php if(isset($over_time_reason)) :?>
+                                <dd><?php echo $input["over_time"];?>時間<?php echo $input["over_minutes"];?>分</dd>
+<?php if(isset($input["over_time_reason"])) :?>
                                 <dt>時間申請理由</dt>
-                                <dd><?php echo nl2br($over_time_reason);?></dd>
+                                <dd><?php echo nl2br($input["over_time_reason"]);?></dd>
 <?php endif; ?>
                             </dl>
                         </li>
@@ -110,25 +113,25 @@ $pdo=null;
                             <input type="button" value="戻る" onclick="history.go(-1)">
                         </li>
                     </ul>
-                    <input type="hidden" name="year" id="year" value="<?php echo $Year;?>">
-                    <input type="hidden" name="month" id="month" value="<?php echo $Month;?>">
-                    <input type="hidden" name="day" id="day" value="<?php echo $Day;?>">
-                    <input type="hidden" name="work_type" id="work_type" value="<?php echo $work_type;?>">
-                    <input type="hidden" name="s_time" id="s_time" value="<?php echo $s_time;?>">
-                    <input type="hidden" name="e_time" id="e_time" value="<?php echo $e_time;?>">
-                    <input type="hidden" name="s_minutes" id="s_minutes" value="<?php echo $s_minutes;?>">
-                    <input type="hidden" name="e_minutes" id="e_minutes" value="<?php echo $e_minutes;?>">
-                    <input type="hidden" name="work_time" id="work_time" value="<?php echo $work_time;?>">
-                    <input type="hidden" name="work_minutes" id="work_minutes" value="<?php echo $work_minutes;?>">
-                    <input type="hidden" name="break_time" id="break_time" value="<?php echo $break_time;?>">
-                    <input type="hidden" name="break_minutes" id="break_minutes" value="<?php echo $break_minutes;?>">
-                    <input type="hidden" name="midnight_time" id="midnight_time" value="<?php echo $midnight_time;?>">
-                    <input type="hidden" name="midnight_minutes" id="midnight_minutes" value="<?php echo $midnight_minutes;?>">
-                    <input type="hidden" name="over_time" id="over_time" value="<?php echo $over_time;?>">
-                    <input type="hidden" name="over_minutes" id="over_minutes" value="<?php echo $over_minutes;?>">
-                    <input type="hidden" name="over_time_reason" id="over_time_reason" value="<?php echo $over_time_reason;?>">
-                    <input type="hidden" name="pass" id="pass" value="<?php echo $pass;?>">
-                    <input type="hidden" name="pass_conf" id="pass_conf" value="<?php echo $pass_conf;?>">
+                    <input type="hidden" name="year" id="year" value="<?php echo $input["Year"];?>">
+                    <input type="hidden" name="month" id="month" value="<?php echo $input["Month"];?>">
+                    <input type="hidden" name="day" id="day" value="<?php echo $input["Day"];?>">
+                    <input type="hidden" name="work_type" id="work_type" value="<?php echo $input["work_type"];?>">
+                    <input type="hidden" name="s_time" id="s_time" value="<?php echo $input["s_time"];?>">
+                    <input type="hidden" name="e_time" id="e_time" value="<?php echo $input["e_time"];?>">
+                    <input type="hidden" name="s_minutes" id="s_minutes" value="<?php echo $input["s_minutes"];?>">
+                    <input type="hidden" name="e_minutes" id="e_minutes" value="<?php echo $input["e_minutes"];?>">
+                    <input type="hidden" name="work_time" id="work_time" value="<?php echo $input["work_time"];?>">
+                    <input type="hidden" name="work_minutes" id="work_minutes" value="<?php echo $input["work_minutes"];?>">
+                    <input type="hidden" name="break_time" id="break_time" value="<?php echo $input["break_time"];?>">
+                    <input type="hidden" name="break_minutes" id="break_minutes" value="<?php echo $input["break_minutes"];?>">
+                    <input type="hidden" name="midnight_time" id="midnight_time" value="<?php echo $input["midnight_time"];?>">
+                    <input type="hidden" name="midnight_minutes" id="midnight_minutes" value="<?php echo $input["midnight_minutes"];?>">
+                    <input type="hidden" name="over_time" id="over_time" value="<?php echo $input["over_time"];?>">
+                    <input type="hidden" name="over_minutes" id="over_minutes" value="<?php echo $input["over_minutes"];?>">
+                    <input type="hidden" name="over_time_reason" id="over_time_reason" value="<?php if(isset($input["over_time_reason"]))echo $input["over_time_reason"];?>">
+                    <!--<input type="hidden" name="pass" id="pass" value="<?php //echo $input["pass"];?>">-->
+                    <!--<input type="hidden" name="pass_conf" id="pass_conf" value="<?php //echo $input["pass_conf"];?>">-->
                     <input type="hidden" name="csrf_token" value="<?php echo $_POST["csrf_token"]; ?>">
 <?php if(isset($_POST["id"])): ?>
                     <input type="hidden" name="id" value="<?php echo $_POST["id"]; ?>">

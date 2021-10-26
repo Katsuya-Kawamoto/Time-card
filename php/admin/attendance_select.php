@@ -4,6 +4,8 @@ require_once "./logic/login.php";
 //現在の日時取得
 require_once "../logic/time_input.php";
 $time=Time_input();                                       //現在の日付取得
+//トークン生成
+require_once '../logic/common_func.php';
 //データベース切断
 $stmt=null;
 $pdo=null;
@@ -27,7 +29,7 @@ $pdo=null;
         </header>
         <main>
             <aside>
-                <ul>
+                <ul id="menu">
                     <li>スタッフ管理</li>
                     <ul>
                         <li><a href="member_register.php">従業員登録</a></li>
@@ -43,9 +45,12 @@ $pdo=null;
                         <li><a href="attendance_select.php">全従業員出力</a></li>
                         <li><a href="attendance_member_list.php">個別出力</a></li>
                     </ul>
-                    <li>
-                        <a href="../logic/logout.php">ログアウト</a>
-                    </li>
+                    <li>その他</li>
+                    <ul>
+                        <li>
+                            <a href="../logic/logout.php">ログアウト</a>
+                        </li>
+                    </ul>
                 </ul>
             </aside>
             <article>
@@ -62,7 +67,11 @@ $pdo=null;
                             <option value="<?php echo (int)$i;?>" <?php if((int)$time["month"]===(int)$i) echo "selected";?>><?php echo (int)$i;?>月</option>
 <?php endfor; ?>
                         </select>
+<?php if(isset($output["error"])):?>
+                        <p class="error"><?php echo $output["error"];?></p>
+<?php endif; ?>
                         <input type="submit" value="出力">
+                <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
                 </form>
             </article>
         </main>
