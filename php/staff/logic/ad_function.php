@@ -1,4 +1,8 @@
 <?php 
+/*
+    スタッフ側データベース関数
+*/
+
     /**
      * パスワード更新
      * @param  $number  ->  社員番号
@@ -94,4 +98,32 @@
         $result=$stmt->fetch();
         return $result;
     }
-?>
+
+        /**
+     * 月ごとの勤務状況取得
+     * @param   $key    -> 勤務情報取得の為のキーNo.
+     * @return  $result -> 情報出力
+     */
+    function attendance_log_output($key){
+        $sql="SELECT * FROM `attendance_log` WHERE keey=:keey";
+        $stmt=connect()->prepare($sql);
+        $stmt->bindParam(':keey',$key);
+        $stmt->execute();
+        $result=$stmt->fetchAll();
+        return $result;
+    }
+
+    function attendance_log_check($key){
+        $sql="SELECT * FROM `attendance_log` WHERE keey=:keey AND `contributor`=1";
+        $stmt=connect()->prepare($sql);
+        $stmt->bindParam(':keey',$key);
+        $stmt->execute();
+        $result=$stmt->fetch();
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+

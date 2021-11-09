@@ -1,6 +1,6 @@
 <?php
 //ログイン
-require "./logic/login.php";
+require "../logic/staff_login.php";
 //勤務状況取得
 require_once "../logic/time_input.php";
 $time=Time_input();                                                             //現在の日付取得
@@ -10,12 +10,10 @@ $time_count=time_count($time_info);                                             
 //お知らせ情報取得
 require_once "../logic/common_func.php";
 $result=info_title();                                                           //件名
-//セッション確認
-var_dump($_SESSION);
+
 //セッション切断
 $stmt=null;
 $pdo=null;
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -31,19 +29,26 @@ $pdo=null;
     <div id="wrapper">
         <header>
             <h1><a href="./staff_top.php">従業員・管理画面</a></h1>
-            <div><?php echo $_SESSION["header-sei"];?>さん、お疲れ様です。</div>
+            <div><?php echo h($_SESSION["header-sei"]);?>さん、お疲れ様です。</div>
         </header>
         <main>
             <aside>
-                <ul id="menu">
+                <label class="title" for="box1" style="background-color:#333333; color:white;" >MENU</label>
+                <input type="checkbox" id="box1" style="display:none;">
+                <ul id="menu" class="toggle">
                     <li>勤怠管理</li>
                     <ul>
-                        <li><a href="attendance_form.php">登録</a></li>
-                        <li><a href="attendance_list.php">編集</a></li>
+                        <li><a href="./attendance/a_form.php">登録</a></li>
+                        <li><a href="./attendance/a_list.php">編集</a></li>
                     </ul>
                     <li>パスワード管理</li>
                     <ul>
-                        <li><a href="pass_reset.php">変更</a></li>
+                        <li><a href="./pass/pass_reset.php">変更</a></li>
+                    </ul>
+                    <li>メッセージ送信</li>
+                    <ul>
+                        <li><a href="./message/admin_form_top.php">一覧</a></li>
+                        <li><a href="./message/admin_form.php">送信</a></li>
                     </ul>
                     <li>その他</li>
                     <ul>
@@ -63,9 +68,9 @@ $pdo=null;
 <?php else: ?>  
 <?php foreach($result as $key => $value) :?>
                         <li>
-                            <a href="./info.php?id=<?php echo $value["id"];?>">
-                                <?php echo $value["title"];?>
-                                <span id="day">|<?php echo $value["created_at"];?></span>
+                            <a href="./info.php?id=<?php echo h($value["id"]);?>">
+                                <?php echo h($value["title"]);?>
+                                <span id="day">|<?php echo h($value["created_at"]);?></span>
                             </a>
                         </li>
 <?php endforeach; ?>
@@ -73,46 +78,74 @@ $pdo=null;
 <?php endif; ?>
                 </section>
                 <section id="time">
-                    <h1><?php echo $time["month"] ?>月の勤務時間 (<?php echo $time["day"] ?>日現在)</h1>
+                    <h1><?php echo (int)h($time["month"]); ?>月の勤務時間 (<?php echo (int)h($time["day"]); ?>日現在)</h1>
 <?php if(isset($time_info)):?>
                     <ul>
                         <li>
                             <dl>
                                 <dt>勤務日数</dt>
-                                <dd><?php echo $time_count["work_count"]; ?>日</dd>
+                                <dd><?php echo h($time_count["work_count"]); ?>日</dd>
                             </dl>
                         </li>
                         <li>
                             <dl>
                                 <dt>勤務時間</dt>
-                                <dd><?php echo $time_cl["work_time"]; ?>時間<?php printf("%02d", $time_cl["work_minutes"]); ?>分</dd>
+                                <dd><?php echo h($time_cl["work_time"]); ?>時間<?php printf("%02d", h($time_cl["work_minutes"])); ?>分</dd>
                             </dl>
                         </li>
                         <li>
                             <dl>
-                                <dt>残業日数</dt>
-                                <dd><?php echo $time_count["over_count"]; ?>日</dd>
+                                <dt>時間外勤務日数</dt>
+                                <dd class="over_time">
+                                    <ul>
+                                        <li><?php echo h($time_count["over_count"]); ?>日</li>
+                                        <li style="border:1px solid #333333; margin-left:5px; background-color:#ffffdd; border-radius:10px;">
+                                            <dl class="pc_flex">
+                                                <dt><b>休日出勤日数</b></dt>
+                                                <dd><?php echo h($time_count["holiday_count"]); ?>日</dd>
+                                            </dl>
+                                            <dl class="pc_flex">
+                                                <dt><b>残業日数</b></dt>    
+                                                <dd><?php echo h($time_count["OVER_count"]); ?>日</dd>
+                                            </dl>
+                                        </li>
+                                    </ul>
+                                </dd>
                             </dl>
                         </li>
                         <li>
                             <dl>
-                                <dt>残業時間</dt>
-                                <dd><?php echo $time_cl["over_time"]; ?>時間<?php printf("%02d", $time_cl["over_minutes"]); ?>分</dd>
+                                <dt>時間外勤務時間</dt>
+                                <dd class="over_time">
+                                    <ul>
+                                        <li><?php echo h($time_cl["over_time"]); ?>時間<?php printf("%02d", h($time_cl["over_minutes"])); ?>分</li>
+                                        <li style="border:1px solid #333333; margin-left:5px; background-color:#ffffdd; border-radius:10px;">
+                                            <dl class="pc_flex">
+                                                <dt><b>休日出勤時間</b></dt>
+                                                <dd><?php echo h($time_cl["holiday_time"]); ?>時間<?php printf("%02d", h($time_cl["holiday_minutes"])); ?>分</dd>
+                                            </dl>
+                                            <dl class="pc_flex">
+                                                <dt><b>残業時間</b></dt>    
+                                                <dd><?php echo h($time_cl["OVER_time"]); ?>時間<?php printf("%02d", h($time_cl["OVER_minutes"])); ?>分</dd>
+                                            </dl>
+                                        </li>
+                                    </ul> 
+                                </dd>
                             </dl>
                         </li>
                         <li>
                             <dl>
                                 <dt>深夜勤務日数</dt>
-                                <dd><?php echo $time_count["midnight_count"]; ?>日</dd>
+                                <dd><?php echo h($time_count["midnight_count"]); ?>日</dd>
                             </dl>
                         </li>
                         <li>
                             <dl>
                                 <dt>深夜勤務時間</dt>
-                                <dd><?php echo $time_cl["midnight_time"]; ?>時間<?php printf("%02d", $time_cl["midnight_minutes"]); ?>分</dd>
+                                <dd><?php echo h($time_cl["midnight_time"]); ?>時間<?php printf("%02d", h($time_cl["midnight_minutes"])); ?>分</dd>
                             </dl>
                         </li>
-                    </ul>                    
+                    </ul>                     
 <?php else: ?>
                         <p>入力された勤務情報がありませんでした。。</p>
 <?php endif; ?>
@@ -120,7 +153,7 @@ $pdo=null;
             </article>
         </main>
         <footer>
-            <p>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</p>
+            <p><small>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</small></p>
         </footer>
     </div>
 </body>

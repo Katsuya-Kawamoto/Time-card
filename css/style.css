@@ -1,22 +1,72 @@
 @charset "UTF-8";
 body{
-    font-size: calc(2rem + 0.7*(100vw - 320px)/320);
+    font-size: calc(1.7rem + 0.7*(100vw - 320px)/320);
     font-family: 'Kosugi Maru', sans-serif;
+    background-color: #106475;
+    height: 100vh;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    flex-direction: column;
+}
+input{
+    font-size: calc(1.5rem + 0.7*(100vw - 320px)/320);
+    font-family: 'Kosugi Maru', sans-serif;
+    display: block;
+	border: 2px solid #ccc;
+	width: 95%;
+	padding: 10px;
+	margin: 10px auto;
+	border-radius: 5px;
+}
+button {
+	float: right;
+	background: #555;
+	padding: 10px 15px;
+	color: #fff;
+	border-radius: 5px;
+	margin-right: 10px;
+	border: none;
+}
+button:hover{
+	opacity: .7;
+}
+label {
+	color: #777;
+	font-size: 18px;
+	padding: 10px;
+    font-weight: bold;
 }
 #wrapper{
+    max-width: 600px;
     min-width: 300px;
-    margin: 0 auto;
-    min-height:100vh;
+    margin: auto;
     display: flex;
+	justify-content: center;
+	align-items: center;
     flex-direction: column;
+    background-color: white;
+    border-radius: 15px;
+    border: 2px solid #ccc;
 }
 header,
 main{
     margin-bottom: 10px;
 }
+header{
+    text-align: center;
+    color: #444;
+    width:100%;
+}
+footer{
+    margin-top: 10px;
+    text-align: center;
+    font-size: 10px;
+}
 /*main*/
 main{
     flex:1;
+    width:100%;
 }
 main>form>ul{
     margin: 0 5px;
@@ -34,8 +84,12 @@ input{
     border: 1px solid black;
 }
 .error{
-    color: red;
-    font-weight: bold;
+    background: #F2DEDE;
+    color: #A94442;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+    margin: 20px auto;
 }
 .m-bottom5px{
     margin-bottom: 5px;

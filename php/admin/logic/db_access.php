@@ -4,7 +4,6 @@
 */
 class db{
 
-
     /**
      * 従業員情報登録
      *
@@ -13,14 +12,15 @@ class db{
      * @param   $mei    ->  $名
      * @return 無し
      */
-    function member_insert($number,$sei,$mei){
+    function member_insert($number,$sei,$mei,$admin){
         $pass_hash=password_hash($number, PASSWORD_DEFAULT);//パスワードをハッシュ値に変換
-        $sql="INSERT INTO `staff` (`number`,`sei`,`mei`,`pass`) VALUES (:number,:sei,:mei,:pass)";
+        $sql="INSERT INTO `staff` (`number`,`sei`,`mei`,`pass`,`admin`) VALUES (:number,:sei,:mei,:pass,:admin)";
         $stmt = connect() -> prepare($sql);
         $stmt->bindParam(':number',$number);
         $stmt->bindParam(':sei',$sei);
         $stmt->bindParam(':mei',$mei);
         $stmt->bindParam(':pass',$pass_hash);
+        $stmt->bindParam(':admin',$admin);
         $stmt->execute();
     }
 
@@ -31,7 +31,7 @@ class db{
      */
     function member_info_input(){
         //sqlに接続して、同じアドレスがあるかチェック
-        $sql="SELECT `number`,`sei`,`mei` FROM `staff` WHERE `number`=:number";
+        $sql="SELECT `number`,`sei`,`mei`,`admin` FROM `staff` WHERE `number`=:number";
         $stmt= connect()->prepare($sql);
         $stmt->bindParam(':number',$_GET["id"]);
         $stmt->execute();
@@ -46,14 +46,15 @@ class db{
      * @param $mei    -> 名
      * @return 無し
      */
-    function menber_info_update($number,$sei,$mei){
+    function menber_info_update($number,$sei,$mei,$admin){
 
-        $sql="UPDATE `staff` SET `sei`=:sei,`mei`=:mei WHERE `number`=:number";
+        $sql="UPDATE `staff` SET `sei`=:sei,`mei`=:mei,`admin`=:admin WHERE `number`=:number";
         //$sql="INSERT INTO `staff` (`number`,`sei`,`mei`,`pass`) VALUES (:number,:sei,:mei,:pass)";
         $stmt = connect() -> prepare($sql);
         $stmt->bindParam(':number',$number);
         $stmt->bindParam(':sei',$sei);
         $stmt->bindParam(':mei',$mei);
+        $stmt->bindParam(':admin',$admin);
         $stmt->execute();
     }
 
@@ -63,18 +64,23 @@ class db{
      * @return   $stmt メンバーの一覧取得結果
      */
     function member_list($offset=0,$count=100){
-        $sql="  SELECT `number`,`sei`,`mei` 
-                FROM `staff`";
+        $sql="  SELECT `number`,`sei`,`mei` ,`admin`
+        FROM `staff`";
         //sqlに接続して、同じアドレスがあるかチェック
         if(isset($_GET["number"])&&strlen($_GET["number"])>0){
             $number=$_GET["number"];
-            $sql .= " WHERE `number`=:number";
+            $sql .= " WHERE `number`LIKE :number ";
         }
         $sql .= "ORDER BY `number` ASC LIMIT ".$offset.",".$count;
         $stmt=connect()->prepare($sql);
-        if(isset($_GET["number"])&&strlen($_GET["number"])>0)$stmt->bindParam(':number',$number);
+        if(isset($_GET["number"])&&strlen($_GET["number"])>0)$stmt->bindvalue(':number',"%".$_GET["number"]."%");
         $stmt->execute();
         $result=$stmt->fetchAll();//結果があるか取得
+        if(!isset($result)){
+            $_SESSION["err-staff"]="対象の従業員がいませんでした。";
+            header('Location: member_list.php');
+            return;
+        }
         return $result;
     }
 
@@ -137,6 +143,7 @@ class db{
         $stmt->bindParam(':created_at',$created_at);
         $stmt->execute();
     }
+
     /**
      * お知らせ情報更新
      *
@@ -171,7 +178,7 @@ class db{
         $stmt->execute();
     }
 
-        /**
+    /**
      * 勤怠情報の削除
      * @param  無し
      * @return 無し 
@@ -192,15 +199,14 @@ class db{
             $stmt->execute();
         }
         //削除の実行
-            foreach($table as $tb): 
-                delete($tb,$value);//正規化されたテーブルごとに削除
-            endforeach;
-            //残業内容のテーブルのみ有無が分かれるのでtryで処理
-            try{
-                delete($otb,$value);   
-            }catch(Exception $ignored){
-                // 残業内容が無いので処理を無視
-            }
+        foreach($table as $tb): 
+            delete($tb,$value);//正規化されたテーブルごとに削除
+        endforeach;
+        //残業内容のテーブルのみ有無が分かれるのでtryで処理
+        try{
+            delete($otb,$value);   
+        }catch(Exception $ignored){
+            // 残業内容が無いので処理を無視
+        }
     }
 }
-?>

@@ -10,8 +10,9 @@ body{
     min-height:100vh;
     display: flex;
     flex-direction: column;
-    background-color: #0b3361;
-    border:1px solid #0b3361;
+    background-color: #106475;
+    border:1px solid #106475;
+    box-shadow: 1px 1px 2px #333333;
 }
 
 header{
@@ -29,30 +30,34 @@ main{
 main a{
     display: block;
     padding: 10px;
-    color:#0b3361;
+    color:#106475;
 }
 main a:hover{
     background-color: rgb(180, 244, 255);
+    border-radius: 5px;
 }
 main aside{
     margin-bottom: 10px;
 }
 main aside>#menu{
     color:#ffffff;
-    border:1px solid #0b3361;
+    border:1px solid #106475;
     padding: 5px;
 }
 main aside>#menu>li{
     text-align: center;
-    border:1px solid #ffffff;
+    border:2px solid #ffffff;
     margin: 5px 0;
     border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 1px 1px 2px #333333;
 }
 main aside>#menu>ul>li{
     margin-left: 10px;
     background-color: #ffffff;
     border-bottom:1px solid #dddddd ;
     margin-bottom: 5px;
+    box-shadow: 1px 1px 2px #333333;
 }
 main aside>#menu>ul>li:nth-last-of-type(1){
     border-bottom:unset;
@@ -63,19 +68,20 @@ main article{
 }
 article #notification{
     margin-bottom: 10px;
-
 }
 article #notification>#n-title{
-    border: 1px solid #0b3361;
+    border: 1px solid #106475;
+    box-shadow: 1px 1px 2px #333333;
+    border-radius: 5px;
 }
 #notification>#n-title>li{
-    border: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 #notification>#n-title>li:nth-last-of-type(1){
     border: unset;
 }
 #notification a{
-    color:#0b3361;
+    color:#106475;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -85,28 +91,30 @@ article #notification>#n-title{
     font-size: 10px;
 }
 /*お知らせ表示*/
-#notification>#info{
+#notification>.info{
     border: 1px solid #333333;
     padding: 10px;
-    
+    box-shadow: 1px 1px 2px #333333;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
-#notification>#info>li{
+#notification>.info>li{
     padding: 5px;
 }
-#notification>#info>li:nth-of-type(1){
+#notification>.info>li:nth-of-type(1){
     margin-bottom: 10px;
     border: 1px solid #333333;
     background-color: rgb(255, 237, 234);
     
 }
-#notification>#info>li:nth-of-type(2){
+#notification>.info>li:nth-of-type(2){
     margin-bottom: 10px;
     background-color: white;
 }
-#notification>#info>li:nth-of-type(3){
+#notification>.info>li:nth-of-type(3){
     border-top: 1px solid #aaaaaa;
 }
-#notification>#info>li:nth-of-type(4){
+#notification>.info>li:nth-of-type(4){
     border-bottom: 1px solid #aaaaaa;
 }
 /* フォーム */
@@ -123,26 +131,32 @@ article #form dd{
 article #form input{
     margin-right: 5px;
 }
-#time li{
+#time>ul>li{
     margin-bottom: 10px;
+    box-shadow: 1px 1px 1px #555555;
 }
-#time dl{
+#time>ul>li>dl{
     display: flex;
     background-color: rgb(239, 241, 119);
     border: 1px solid #333333;
 }
-#time dt{
-    width: 40%;
+#time>ul>li>dl>dt{
+    width: 45%;
     min-width: 150px;
     text-align: center;
-    padding: 10px;
+    padding: 5px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-#time dd{
-    width: 60%;
-    padding: 10px;
+#time>ul>li>dl>dd{
+    width: 55%;
+    padding: 5px;
     background-color: white;
 }
+
+
 /*出勤状況*/
 #time-info{
     width: 100%;
@@ -156,11 +170,12 @@ article #form input{
     border: 1px solid #aaaaaa;
 }
 #time-info th{
-    background-color: #0b3361;
+    background-color: #106475;
     color: white;
 } 
 #time-info td{
     text-align: center;
+    height: 47px;
 }
 #time-info td>ul{
     display:flex;
@@ -170,15 +185,33 @@ article #form input{
 #time-info  .border-none{
     border: none;
 }
+/*ログ*/
+#log{
+    font-size: 10px;
+}
+#log td,
+#log th{
+    padding: 3px;
+    border: 1px solid #aaaaaa;
+}
+#log th{
+    background-color: #106475;
+    color: white;
+} 
+#log td{
+    text-align: center;
+}
 /*リスト*/
 #list_output th{
-    background-color: #0b3361;
+    background-color: #106475;
     color:white;
     border: 1px solid #aaaaaa;
 }
 #list_output td{
     text-align: center;
     border: 1px solid #aaaaaa;
+    height: 50px;
+    overflow-wrap:normal;
 }
 #list_output p{
     margin-top: 10px;
@@ -209,13 +242,26 @@ table{
 .m-bottom5px{
     margin-bottom: 5px;
 }
+.m-bottom10px{
+    margin-bottom: 10px;
+}
 .error{
-    color: red;
-    font-weight: bold;
+    background: #F2DEDE;
+    color: #A94442;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
 }
 input,
 textarea#contents {
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 3px;
+}
+textarea#contents {
+    width:100%;
+    padding:5px;
+    font-size: 20px;
+    font-family: 'Kosugi Maru', sans-serif;
 }
 input,
 select{
@@ -232,10 +278,60 @@ select{
 .pc_only{
     display: none;
 }
+.over_time dl{
+    padding-left:3px;
+}
 #time-info{
     font-size: 14px;
 }
+.title{
+	pointer-events: none;
+    padding: 10px;
+    margin:5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
 
+@media screen and (max-width: 1000px){
+    .title{
+        pointer-events: all;
+        box-shadow: 0 1px 1px #333333;
+    }
+    
+    .toggle{
+        height: 0;
+        padding: 0 8px;
+        transition: .2s;
+    }
+    
+    input:checked + .toggle{
+        height: auto;
+        padding: 8px;
+    }
+    
+    .toggle li{
+        padding: 0 8px;
+        line-height: 0;
+        visibility: hidden;
+        opacity: 0;
+        transition: 
+            padding .2s,
+            line-height .2s,
+            visibility .1s,
+            opacity .1s;
+    }
+    
+    input:checked + .toggle li{
+        padding: 8px;
+        line-height: 1.5;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    aside>ul{
+        margin-top: 5px;
+    }
+}
 
 /*PC用*/
 @media  (min-width: 1000px){
@@ -255,10 +351,12 @@ select{
     main aside{
         flex:1;
         margin-bottom: 0;
+        min-width: 250px;
     }
     article{
         flex:3;
         margin-right: 5px;
+        max-width: 750px;
     }
     /*parts*/
     .pc_only{
@@ -283,4 +381,14 @@ select{
         justify-content: center;
         align-items: center;
     }
+    .over_time dt{
+        width: 40%;
+    }
+    .over_time dd{
+        width: 60%;
+    }
+    .title{
+        display: none;
+    }
+
 }

@@ -5,12 +5,10 @@ $session=new session();
 $session->start();//セッションスタート
 $output=$_SESSION;//変数に一旦、セッション情報を代入
 $session->destroy();//セッション情報の削除
-
-
 //トークン生成
 $session->start();//セッションスタート
 require_once './php/logic/common_func.php';
-var_dump($_SESSION);
+//var_dump($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -23,10 +21,15 @@ var_dump($_SESSION);
     <link rel="stylesheet" href="css/style.css"><!--メイン用CSS-->
 </head>
 <body>
-    
     <div id="wrapper">
         <header>
             <h1>勤怠管理-従業員用</h1>
+            <nav>
+                <ul id="menu">
+                    <li>TOP</li>
+                    <li><a href="./administrator.php">管理者用</a></li>
+                </ul>
+            </nav>
 <?php if(isset($output["log_out"])) :?>
                         <dd class="error"><?php echo $output["log_out"]; ?></dd>
 <?php endif; ?>
@@ -36,8 +39,8 @@ var_dump($_SESSION);
             <ul>
                 <li>
                     <dl class="m-bottom5px">
-                        <dt>社員No.</dt>
-                        <dd><input type="text" name="number" id="number" required></dd>
+                        <dt><label>社員No.</label></dt>
+                        <dd><input type="text" name="s_number" id="number" required></dd>
 <?php if(isset($output["err-number"])) :?>
                         <dd class="error"><?php echo $output["err-number"]; ?></dd>
 <?php endif; ?>
@@ -45,28 +48,29 @@ var_dump($_SESSION);
                 </li>
                 <li>
                     <dl class="m-bottom5px">
-                        <dt>パスワード</dt>
-                        <dd><input type="pass" name="pass" id="pass" required></dd>
+                        <dt><label>パスワード</label></dt>
+                        <dd><input type="password" name="s_pass" id="pass" required></dd>
 <?php if(isset($output["err-pass"])) :?>
                         <dd class="error"><?php echo $output["err-pass"]; ?></dd>
 <?php endif; ?>
                     </dl>
                 </li>
                 <li>
-                    <input type="submit" value="ログイン">
+                    <button type="submit">ログイン</button>
                 </li>
             </ul>
             <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
             </form>
         </main>
         <footer>
-            <nav>
-                <ul id="menu">
-                    <li>TOP</li>
-                    <li><a href="./administrator.php">管理者用</a></li>
-                </ul>
-            </nav>
+            <p><small>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</small></p>
         </footer>
+        <div style="margin-top:10px;">
+            <ul>
+                <!--<li><a href="./info.pdf" target="_blank">作品説明はこちら</a></li>-->
+                <li><a href="https://github.com/Katsuya-Kawamoto/timecard" target="_blank" style="display:flex; align-items:center;">   <img style="width:30px" src="./img/git.png" alt="ソースコードはこちら">Git-hubはこちら</a></li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

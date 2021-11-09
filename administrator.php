@@ -9,7 +9,7 @@ $session->destroy();//セッション情報の削除
 //トークン生成
 $session->start();//セッションスタート
 require_once './php/logic/common_func.php';
-var_dump($_SESSION);
+//var_dump($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -25,6 +25,12 @@ var_dump($_SESSION);
     <div id="wrapper">
         <header>
             <h1>勤怠管理-管理者用</h1>
+            <nav>
+                <ul id="menu">
+                    <li>TOP</li>
+                    <li><a href="index.php">スタッフ用</a></li>
+                </ul>
+            </nav>
 <?php if(isset($output["log_out"])) :?>
                         <dd class="error"><?php echo $output["log_out"]; ?></dd>
 <?php endif; ?>
@@ -34,8 +40,8 @@ var_dump($_SESSION);
             <ul>
                 <li>
                     <dl class="m-bottom5px">
-                        <dt>管理者ID</dt>
-                        <dd><input type="text" name="id" id="id"></dd>
+                        <dt><label>管理者ID</label></dt>
+                        <dd><input type="text" name="id" id="id" required></dd>
 <?php if(isset($output["err-id"])) :?>
                         <dd class="error"><?php echo $output["err-id"]; ?></dd>
 <?php endif; ?>
@@ -43,8 +49,8 @@ var_dump($_SESSION);
                 </li>
                 <li>
                     <dl class="m-bottom5px">
-                        <dt>社員No.</dt>
-                        <dd><input type="text" name="number" id="number"></dd>
+                        <dt><label>社員No.</label></dt>
+                        <dd><input type="text" name="number" id="number" required></dd>
 <?php if(isset($output["err-number"])) :?>
                         <dd class="error"><?php echo $output["err-number"]; ?></dd>
 <?php endif; ?>
@@ -52,8 +58,8 @@ var_dump($_SESSION);
                 </li>
                 <li>
                     <dl class="m-bottom5px">
-                        <dt>パスワード</dt>
-                        <dd><input type="text" name="pass" id="pass"></dd>
+                        <dt><label>パスワード</label></dt>
+                        <dd><input type="password" name="pass" id="pass" required></dd>
 <?php if(isset($output["err-pass"])) :?>
                         <dd class="error"><?php echo $output["err-pass"]; ?></dd>
 <?php endif; ?>
@@ -64,18 +70,13 @@ var_dump($_SESSION);
                         <p class="error"><?php echo $output["err-login"]; ?></p>
 <?php endif; ?>
                     <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
-                    <input type="submit" value="ログイン">
+                    <button type="submit">ログイン</button>
                 </li>
             </ul>
             </form>
         </main>
         <footer>
-            <nav>
-                <ul id="menu">
-                    <li>TOP</li>
-                    <li><a href="index.php">スタッフ用</a></li>
-                </ul>
-            </nav>
+            <p><small>&copy;&nbsp;2021&nbsp;Katsuya&nbsp;Kawamoto*</small></p>
         </footer>
     </div>
 </body>
